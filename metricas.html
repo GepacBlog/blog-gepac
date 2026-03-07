@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog de GEPAC · Métricas</title>
+    <link rel="stylesheet" href="./css/styles.css?v=20260307-7" />
+    <style>
+      .metrics-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:12px; margin: 14px 0 18px; }
+      .metric-card { background:#fff; border:1px solid #e3e0d8; border-radius:12px; padding:12px; }
+      .metric-label { font-size:.85rem; color:#5e6577; }
+      .metric-value { font-size:1.6rem; font-weight:800; margin-top:4px; }
+      .table-wrap { background:#fff; border:1px solid #e3e0d8; border-radius:12px; overflow:auto; }
+      table { width:100%; border-collapse: collapse; }
+      th, td { padding:10px 12px; border-bottom:1px solid #ece8df; text-align:left; font-size:.95rem; }
+      th { background:#f8f6f2; font-family: Georgia, "Times New Roman", serif; }
+      @media (max-width: 900px){ .metrics-grid { grid-template-columns:1fr; } }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand-head">
+        <a href="https://www.gepac.es" target="_blank" rel="noopener noreferrer">
+          <img class="gepac-logo" src="./assets/gepac-logo.webp" alt="GEPAC" />
+        </a>
+      </div>
+      <div class="brand-tag">PACIENTES / CÁNCER</div>
+      <h1>Métricas del blog</h1>
+      <p>Resumen básico de publicaciones</p>
+      <div class="brand-strip" aria-hidden="true"></div>
+      <nav class="top-nav top-sections">
+        <a class="nav-link nav-history" href="./index.html?v=20260307-3">Volver a portada</a>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section>
+        <h2>Resumen</h2>
+        <div id="metrics-grid" class="metrics-grid"></div>
+
+        <h2>Publicaciones por mes</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Mes</th><th>Total</th><th>GEPAC</th><th>AEAL</th></tr>
+            </thead>
+            <tbody id="monthly-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data/posts.js?v=20260307-8"></script>
+    <script src="./js/metricas.js?v=20260308-1"></script>
+  </body>
+</html>

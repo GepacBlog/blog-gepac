@@ -25,6 +25,11 @@ En portada solo salen noticias del último mes y cada una abre en otra pestaña.
 
 También hay una pestaña `historico.html` ("Leer antiguas") donde se muestran las noticias anteriores al último mes dentro del año en curso.
 
+También hay una pestaña `metricas.html` con resumen básico:
+- Total publicaciones del año
+- Totales por editorial (GEPAC/AEAL)
+- Tabla mensual
+
 ## Publicación automática por Gmail
 Script: `tools/publish-from-gmail.mjs`
 
@@ -48,6 +53,13 @@ Ejecución manual desde `blog/`:
 ```bash
 node tools/publish-from-gmail.mjs
 ```
+
+## Backup automático
+Script de backup: `tools/backup-blog.sh`
+
+- Guarda `.tar.gz` en `~/Desktop/iA/backups/blog/`
+- Mantiene los 30 backups más recientes
+- Cron diario activo: **02:30 Europe/Madrid**
 
 El script:
 1. lee correos `in:important is:unread` de `agentekrok@gmail.com`
