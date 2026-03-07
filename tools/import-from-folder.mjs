@@ -180,7 +180,7 @@ function parseDocText(src='') {
   }
 
   const body = bodyLines.join('\n').replace(/\n{3,}/g,'\n\n').trim();
-  const summary = body.split(/\n\n+/)[0] || '';
+  const summary = pickCleanLead(body);
 
   return { title, summary, body, seoTitle, metaDescription, keywords, author };
 }
@@ -189,7 +189,19 @@ function sanitizeBody(b='') {
   return b
     .replace(/_{3,}/g, '\n\n')
     .replace(/\n{3,}/g, '\n\n')
+    .split(/\n/)
+    .filter((ln)=>!/(^\s*firma editorial\b|^\s*serie\s+(gepac|aeal)\b|^\s*title\s*seo\b|^\s*meta\s*description\b)/i.test(ln))
+    .join('\n')
     .trim();
+}
+
+function pickCleanLead(body='') {
+  const parts = String(body).split(/\n\n+/).map(x=>x.trim()).filter(Boolean);
+  for (const p of parts) {
+    if (/(^\s*firma editorial\b|^\s*serie\s+(gepac|aeal)\b|^\s*title\s*seo\b|^\s*meta\s*description\b)/i.test(p)) continue;
+    return p;
+  }
+  return parts[0] || '';
 }
 
 function buildHtml({title, editorial, author, dateISO, summary, body, imgMain, imgEnd, seoTitle, metaDescription, keywords}) {
