@@ -17,13 +17,12 @@ async function init() {
     }
 
     const now = new Date();
-    const monthAgo = new Date(now);
-    monthAgo.setMonth(monthAgo.getMonth() - 1);
+    const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const yearStart = new Date(now.getFullYear(), 0, 1);
 
     cachedHistoryPosts = posts
       .map((p) => ({ ...p, dateObj: new Date(p.date) }))
-      .filter((p) => p.dateObj >= yearStart && p.dateObj < monthAgo)
+      .filter((p) => p.dateObj >= yearStart && p.dateObj < last30Days)
       .sort((a, b) => b.dateObj - a.dateObj);
 
     bindFilters();

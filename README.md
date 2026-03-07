@@ -21,7 +21,7 @@ Esto:
 2. ruta ejemplo: `historicos/2026/03-marzo/gepac/001_2026-03-07_titulo-de-la-noticia.html`
 3. añade la noticia a `data/posts.json`
 
-En portada solo salen noticias del último mes y cada una abre en otra pestaña.
+En portada solo salen noticias de los últimos 30 días y cada una abre en la misma pestaña.
 
 También hay una pestaña `historico.html` ("Leer antiguas") donde se muestran las noticias anteriores al último mes dentro del año en curso.
 

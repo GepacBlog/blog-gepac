@@ -4,8 +4,7 @@ const mostRead = document.getElementById("most-read");
 const publishStatus = document.getElementById("publish-status");
 
 const now = new Date();
-const monthAgo = new Date(now);
-monthAgo.setMonth(monthAgo.getMonth() - 1);
+const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 const params = new URLSearchParams(location.search);
 const editorialFilter = (params.get('ed') || 'all').toLowerCase();
 
@@ -22,7 +21,7 @@ async function init() {
 
     let latestMonthPosts = posts
       .map((p, i) => ({ ...normalizePost(p, i), dateObj: new Date(p.date) }))
-      .filter((p) => p.dateObj >= monthAgo && p.dateObj <= now)
+      .filter((p) => p.dateObj >= last30Days && p.dateObj <= now)
       .sort((a, b) => b.dateObj - a.dateObj);
 
     if (editorialFilter === 'gepac' || editorialFilter === 'aeal') {
