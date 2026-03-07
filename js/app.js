@@ -68,11 +68,6 @@ function renderFeatured(p) {
         <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
         <p>${escapeHTML(p.summary)}</p>
         <a class="read-more" href="${p.url}">...Leer más</a>
-        <div class="card-footer">
-          <span>${escapeHTML(p.category)}</span>
-          <span>${escapeHTML(p.author)}</span>
-          <span>${p.comments} comentarios</span>
-        </div>
       </div>
     </article>
   `;
