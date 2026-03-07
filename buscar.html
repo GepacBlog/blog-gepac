@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog de GEPAC · Buscar</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Blog de GEPAC</h1>
+      <p>Búsqueda interna</p>
+      <nav class="top-nav top-sections">
+        <a class="nav-link nav-history" href="./index.html">Volver a portada</a>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section>
+        <h2>Buscar noticias</h2>
+        <form id="search-form" class="search-form">
+          <input id="search-input" type="text" placeholder="Buscar por título, resumen, autor..." />
+          <button type="submit" class="filter-btn">Buscar</button>
+        </form>
+        <div class="filter-row">
+          <button id="search-filter-all" class="filter-btn active">Todas</button>
+          <button id="search-filter-gepac" class="filter-btn gepac-btn">GEPAC</button>
+          <button id="search-filter-aeal" class="filter-btn aeal-btn">AEAL</button>
+        </div>
+        <div id="search-results" class="news-list"></div>
+      </section>
+    </main>
+
+    <script src="./data/posts.js"></script>
+    <script src="./js/buscar.js"></script>
+  </body>
+</html>

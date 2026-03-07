@@ -1,0 +1,5 @@
+window.PUBLISH_STATUS = {
+  "lastRun": "2026-03-07T19:05:05.007Z",
+  "published": 0,
+  "message": "No había entradas nuevas para publicar"
+};

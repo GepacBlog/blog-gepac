@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog de GEPAC · Noticias antiguas</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Blog de GEPAC</h1>
+      <p>Noticias antiguas del año en curso</p>
+      <nav class="top-nav top-sections">
+        <a class="nav-link nav-history" href="./index.html">Volver a portada</a>
+        <a class="nav-link nav-search" href="./buscar.html">Buscar</a>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <section>
+        <h2>Histórico anual</h2>
+        <div class="filter-row">
+          <button id="filter-all" class="filter-btn active">Todas</button>
+          <button id="filter-gepac" class="filter-btn gepac-btn">Editorial GEPAC</button>
+          <button id="filter-aeal" class="filter-btn aeal-btn">Editorial AEAL</button>
+        </div>
+        <div id="list-history" class="news-list"></div>
+      </section>
+    </main>
+
+    <script src="./data/posts.js"></script>
+    <script src="./js/historico.js"></script>
+  </body>
+</html>

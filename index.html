@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog de GEPAC</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Blog de GEPAC</h1>
+      <p>Noticias del último mes</p>
+      <nav class="top-nav top-sections">
+        <a class="nav-link nav-gepac" href="#">GEPAC</a>
+        <a class="nav-link nav-aeal" href="#">AEAL</a>
+        <a class="nav-link nav-history" href="./historico.html">Leer antiguas</a>
+        <a class="nav-link nav-search" href="./buscar.html">Buscar</a>
+      </nav>
+    </header>
+
+    <main class="layout home-layout">
+      <aside class="left-sidebar">
+        <div class="module">
+          <h3>Estado publicación</h3>
+          <div id="publish-status" class="status-box">Sin datos aún</div>
+        </div>
+        <div class="module">
+          <h3>Lo más leído</h3>
+          <ul id="most-read" class="mini-list"></ul>
+        </div>
+        <div class="module ad-slot">Espacio publicidad 1</div>
+        <div class="module ad-slot">Espacio publicidad 2</div>
+      </aside>
+
+      <section>
+        <h2>Destacada</h2>
+        <div id="featured-home"></div>
+
+        <h2>Últimas noticias</h2>
+        <div id="list-home" class="news-list"></div>
+      </section>
+    </main>
+
+    <script src="./data/posts.js"></script>
+    <script src="./data/publisher-status.js"></script>
+    <script src="./js/app.js"></script>
+  </body>
+</html>
