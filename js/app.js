@@ -4,7 +4,6 @@ const mostRead = document.getElementById("most-read");
 const publishStatus = document.getElementById("publish-status");
 
 const now = new Date();
-const last30Days = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 const params = new URLSearchParams(location.search);
 const editorialFilter = (params.get('ed') || 'all').toLowerCase();
 
@@ -21,7 +20,7 @@ async function init() {
 
     let latestMonthPosts = posts
       .map((p, i) => ({ ...normalizePost(p, i), dateObj: new Date(p.date) }))
-      .filter((p) => p.dateObj >= last30Days && p.dateObj <= now)
+      .filter((p) => isWithinLastNDays(p.date, 30))
       .sort((a, b) => b.dateObj - a.dateObj);
 
     if (editorialFilter === 'gepac' || editorialFilter === 'aeal') {
@@ -142,6 +141,18 @@ function ageLabel(dateObj) {
   if (diffDays === 0) return "Noticia de hoy";
   if (diffDays === 1) return "Noticia de hace 1 día";
   return `Noticia de hace ${diffDays} días`;
+}
+
+function isWithinLastNDays(dateISO, days = 30) {
+  const [y, m, d] = String(dateISO).split('-').map(Number);
+  const article = new Date(y, (m || 1) - 1, d || 1);
+  article.setHours(0, 0, 0, 0);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.floor((today - article) / 86400000);
+  return diffDays >= 0 && diffDays <= days;
 }
 
 function escapeHTML(str = "") {
