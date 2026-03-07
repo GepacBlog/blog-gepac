@@ -24,11 +24,11 @@ body {
 }
 .brand-head {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 4px;
   margin-bottom: 8px;
-  flex-wrap: wrap;
 }
 .gepac-logo {
   height: 44px;
@@ -36,6 +36,8 @@ body {
   display: block;
 }
 .brand-tag {
+  display: block;
+  text-align: center;
   font-size: .8rem;
   font-weight: 800;
   letter-spacing: .06em;
