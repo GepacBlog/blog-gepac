@@ -252,13 +252,22 @@ function pickImages(dir) {
   };
 }
 function copyImageToAssets(src, editorial, dateISO, title, slot = '01') {
-  const ext = path.extname(src).toLowerCase() || '.jpg';
-  const filename = `${dateISO}_${editorial.toLowerCase()}_${slugify(title)}_${slot}${ext}`;
+  const base = `${dateISO}_${editorial.toLowerCase()}_${slugify(title)}_${slot}`;
   const dstDir = path.join(ROOT, 'assets', 'uploads');
   fs.mkdirSync(dstDir, { recursive: true });
-  const dst = path.join(dstDir, filename);
-  fs.copyFileSync(src, dst);
-  return `./assets/uploads/${filename}`;
+
+  const webpName = `${base}.webp`;
+  const webpDst = path.join(dstDir, webpName);
+
+  try {
+    run(`cwebp -q 82 -resize 1600 0 ${shellEscape(src)} -o ${shellEscape(webpDst)}`);
+    return `./assets/uploads/${webpName}`;
+  } catch {
+    const ext = path.extname(src).toLowerCase() || '.jpg';
+    const fallbackName = `${base}${ext}`;
+    fs.copyFileSync(src, path.join(dstDir, fallbackName));
+    return `./assets/uploads/${fallbackName}`;
+  }
 }
 function createArticle({ editorial, dateISO, title, summary, content, author, imageMain, imageEnd }) {
   const [year] = dateISO.split('-');

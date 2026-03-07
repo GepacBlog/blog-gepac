@@ -241,11 +241,20 @@ function pickImages(dir) {
 }
 
 function copyAsset(src, editorial, dateISO, slug, slot) {
-  const ext = path.extname(src).toLowerCase() || '.jpg';
-  const name = `${dateISO}_${editorial.toLowerCase()}_${slug}_${slot}${ext}`;
-  const dst = path.join(ROOT, 'assets', 'uploads', name);
-  fs.copyFileSync(src, dst);
-  return `./assets/uploads/${name}`;
+  const base = `${dateISO}_${editorial.toLowerCase()}_${slug}_${slot}`;
+  const webpName = `${base}.webp`;
+  const webpDst = path.join(ROOT, 'assets', 'uploads', webpName);
+
+  try {
+    execSync(`cwebp -q 82 -resize 1600 0 ${quote(src)} -o ${quote(webpDst)}`, { stdio: 'ignore' });
+    return `./assets/uploads/${webpName}`;
+  } catch {
+    const ext = path.extname(src).toLowerCase() || '.jpg';
+    const name = `${base}${ext}`;
+    const dst = path.join(ROOT, 'assets', 'uploads', name);
+    fs.copyFileSync(src, dst);
+    return `./assets/uploads/${name}`;
+  }
 }
 
 function nextNumber(folder) {
