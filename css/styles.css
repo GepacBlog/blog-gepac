@@ -347,6 +347,13 @@ section h2 {
   .home-layout {
     grid-template-columns: 1fr;
   }
+  /* En móvil primero noticias, luego sidebar */
+  .home-layout > section {
+    order: 1;
+  }
+  .home-layout > .left-sidebar {
+    order: 2;
+  }
   .left-sidebar {
     position: static;
     grid-template-columns: 1fr 1fr;
@@ -366,6 +373,16 @@ section h2 {
   }
   .left-sidebar {
     grid-template-columns: 1fr;
+  }
+  .top-sections {
+    gap: 6px;
+  }
+  .nav-link {
+    padding: 7px 10px;
+    font-size: .85rem;
+  }
+  .ad-slot {
+    min-height: 120px;
   }
 }
 
