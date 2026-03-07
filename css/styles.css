@@ -18,7 +18,7 @@ body {
 }
 
 .site-header {
-  padding: 20px 20px 18px;
+  padding: 14px 20px 12px;
   text-align: center;
   border-bottom: 1px solid var(--card-border);
   background: #fff;
@@ -46,19 +46,19 @@ body {
 }
 .brand-tag {
   text-align: center;
-  font-size: .8rem;
+  font-size: .78rem;
   font-weight: 800;
-  letter-spacing: .06em;
+  letter-spacing: .08em;
   color: #00a39b;
-  margin: 0 auto 6px;
+  margin: 0 auto 4px;
 }
 .site-header h1 {
-  margin: 4px 0 8px;
-  font-size: 1.9rem;
+  margin: 2px 0 6px;
+  font-size: 2rem;
   font-family: Georgia, "Times New Roman", serif;
   letter-spacing: .01em;
 }
-.site-header p { margin: 0; color: var(--muted); }
+.site-header p { margin: 0; color: var(--muted); font-size: .95rem; }
 .brand-strip {
   margin: 12px auto 0;
   width: 100%;
@@ -131,8 +131,9 @@ section h2 {
 }
 .featured-card h3 {
   margin: 0 0 8px;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   line-height: 1.25;
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .news-list {
@@ -141,7 +142,7 @@ section h2 {
 }
 
 .home-layout {
-  grid-template-columns: 280px minmax(0, 1fr);
+  grid-template-columns: 300px minmax(0, 1fr);
   align-items: start;
 }
 
@@ -157,6 +158,7 @@ section h2 {
   border: 1px solid var(--card-border);
   border-radius: 12px;
   padding: 12px;
+  box-shadow: 0 6px 18px rgba(20, 28, 45, 0.04);
 }
 .module h3 {
   margin: 0 0 10px;
@@ -204,6 +206,7 @@ section h2 {
   padding: 14px;
   border: 1px solid var(--card-border);
   border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(20, 28, 45, 0.04);
 }
 .news-card.gepac,
 .featured-card.gepac {
@@ -226,8 +229,9 @@ section h2 {
 
 .news-card h3 {
   margin: 0 0 6px;
-  font-size: 1rem;
+  font-size: 1.08rem;
   line-height: 1.3;
+  font-family: Georgia, "Times New Roman", serif;
 }
 .news-card p {
   margin: 0 0 8px;
