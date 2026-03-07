@@ -12,8 +12,7 @@
 body {
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  background: linear-gradient(135deg, #eddfff 0%, #ffe7d1 100%);
-  background-attachment: fixed;
+  background: #f3f1ec;
   min-height: 100vh;
   color: var(--text);
 }
@@ -22,7 +21,17 @@ body {
   padding: 20px 20px 18px;
   text-align: center;
   border-bottom: 1px solid var(--card-border);
-  background: linear-gradient(90deg, rgba(143,99,217,.12) 0%, rgba(231,138,53,.12) 100%);
+  background: #fff;
+  position: relative;
+}
+.site-header::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #8f63d9 0%, #e78a35 100%);
 }
 .brand-head {
   display: flex;
@@ -43,7 +52,12 @@ body {
   color: #00a39b;
   margin: 0 auto 6px;
 }
-.site-header h1 { margin: 4px 0 8px; font-size: 1.6rem; }
+.site-header h1 {
+  margin: 4px 0 8px;
+  font-size: 1.9rem;
+  font-family: Georgia, "Times New Roman", serif;
+  letter-spacing: .01em;
+}
 .site-header p { margin: 0; color: var(--muted); }
 .brand-strip {
   margin: 12px auto 0;
@@ -85,10 +99,18 @@ body {
   gap: 24px;
 }
 
+.home-layout section {
+  background: #fff;
+  border: 1px solid #e3e0d8;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(20, 28, 45, 0.04);
+}
 
 section h2 {
   margin: 0 0 12px;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 #featured-home { margin-bottom: 16px; }
