@@ -73,7 +73,7 @@ function render(list, query = '') {
           <div class="meta"><span>${p.date}</span><span class="age-badge">Editorial ${escapeHTML(p.editorial)}</span></div>
           <h3>${escapeHTML(p.title)}</h3>
           <p>${escapeHTML(p.summary)}</p>
-          <a class="read-more" href="${p.url}" target="_blank" rel="noopener noreferrer">...Leer más</a>
+          <a class="read-more" href="${p.url}">...Leer más</a>
         </div>
       </article>`;
     })

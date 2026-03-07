@@ -67,7 +67,7 @@ function renderFeatured(p) {
         <div class="meta"><span>${p.date}</span><span class="age-badge">${ageLabel(p.dateObj)}</span></div>
         <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
         <p>${escapeHTML(p.summary)}</p>
-        <a class="read-more" href="${p.url}" target="_blank" rel="noopener noreferrer">...Leer más</a>
+        <a class="read-more" href="${p.url}">...Leer más</a>
         <div class="card-footer">
           <span>${escapeHTML(p.category)}</span>
           <span>${escapeHTML(p.author)}</span>
@@ -89,7 +89,7 @@ function renderList(posts, mountNode) {
           <div class="meta"><span>${p.date}</span><span class="age-badge">${ageLabel(p.dateObj)}</span></div>
           <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
           <p>${escapeHTML(p.summary)}</p>
-          <a class="read-more" href="${p.url}" target="_blank" rel="noopener noreferrer">...Leer más</a>
+          <a class="read-more" href="${p.url}">...Leer más</a>
           <div class="card-footer">
             <span>${escapeHTML(p.category)}</span>
             <span>${escapeHTML(p.author)}</span>
@@ -107,7 +107,7 @@ function renderMostRead(posts) {
     .slice()
     .sort((a, b) => b.views - a.views)
     .map(
-      (p) => `<li><a href="${p.url}" target="_blank" rel="noopener noreferrer">${escapeHTML(
+      (p) => `<li><a href="${p.url}">${escapeHTML(
         p.title
       )}</a></li>`
     )
