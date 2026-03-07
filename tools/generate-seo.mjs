@@ -65,6 +65,7 @@ function patchArticles(posts) {
     html = upsertMeta(html, 'og:url', `<meta property="og:url" content="${absUrl}"/>`);
     html = upsertMeta(html, 'og:image', `<meta property="og:image" content="${ogImage}"/>`);
     html = upsertMeta(html, 'twitter:card', `<meta name="twitter:card" content="summary_large_image"/>`);
+    html = upsertJsonLd(html, buildArticleJsonLd(p, absUrl, ogImage));
 
     fs.writeFileSync(filePath, html);
   }
@@ -82,6 +83,41 @@ function upsertMeta(html, key, tag) {
     return html.replace(checks[key], tag);
   }
 
+  return html.replace(/<\/head>/i, `  ${tag}\n</head>`);
+}
+
+function buildArticleJsonLd(post, absUrl, ogImage) {
+  const dateISO = post.date || new Date().toISOString().slice(0, 10);
+  const datePublished = `${dateISO}T09:00:00+01:00`;
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title || 'Noticia',
+    description: post.summary || post.title || 'Noticia',
+    datePublished,
+    dateModified: new Date().toISOString(),
+    mainEntityOfPage: absUrl,
+    image: [ogImage],
+    author: {
+      '@type': 'Organization',
+      name: post.author || (post.editorial === 'AEAL' ? 'AEAL' : 'GEPAC'),
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: post.editorial === 'AEAL' ? 'AEAL' : 'GEPAC',
+      logo: {
+        '@type': 'ImageObject',
+        url: `${BASE}/assets/gepac-logo.webp`,
+      },
+    },
+  };
+  return JSON.stringify(data);
+}
+
+function upsertJsonLd(html, jsonStr) {
+  const tag = `<script id="jsonld-article" type="application/ld+json">${jsonStr}</script>`;
+  const re = /<script\s+id="jsonld-article"[^>]*>[\s\S]*?<\/script>/i;
+  if (re.test(html)) return html.replace(re, tag);
   return html.replace(/<\/head>/i, `  ${tag}\n</head>`);
 }
 
