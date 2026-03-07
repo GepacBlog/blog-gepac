@@ -14,6 +14,7 @@ const search = runJson(`gog gmail search "${QUERY}" --account ${ACCOUNT} --max 2
 const threads = search?.threads || [];
 
 let processed = 0;
+let draftsCreated = 0;
 const errors = [];
 for (const t of threads) {
   try {
@@ -55,7 +56,11 @@ for (const t of threads) {
       ? copyImageToAssets(secondaryImagePath, editorial, dateISO, title, '02')
       : '';
 
-    const relUrl = createArticle({
+    saveDraft({
+      id: `d-${t.id}`,
+      threadId: t.id,
+      account: ACCOUNT,
+      createdAt: new Date().toISOString(),
       editorial,
       dateISO,
       title,
@@ -64,11 +69,11 @@ for (const t of threads) {
       author,
       imageMain: imageForCards,
       imageEnd: imageForEnd,
+      sourceSubject: headers.subject || subject || title,
     });
-    upsertPost({ editorial, date: dateISO, title, summary, image: imageForCards, url: relUrl, author, category: editorial, comments: 0 });
 
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
-    processed += 1;
+    draftsCreated += 1;
   } catch (err) {
     const msg = `Error en hilo ${t.id}: ${err.message}`;
     errors.push(msg);
@@ -77,11 +82,13 @@ for (const t of threads) {
 }
 
 syncPostsJs();
-writePublisherStatus({ processed, errors });
-if (processed > 0) {
-  autoGitPublish(processed);
+syncDraftsJs();
+writePublisherStatus({ processed, draftsCreated, errors });
+if (processed > 0 || draftsCreated > 0) {
+  autoGitPublish(processed, draftsCreated);
 }
 console.log(`Publicadas: ${processed}`);
+console.log(`Borradores: ${draftsCreated}`);
 
 function run(cmd) {
   return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -329,11 +336,33 @@ function syncPostsJs() {
   const posts = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'posts.json'), 'utf8'));
   fs.writeFileSync(path.join(ROOT, 'data', 'posts.js'), `window.POSTS = ${JSON.stringify(posts, null, 2)};\n`);
 }
-function writePublisherStatus({ processed, errors }) {
+function loadDrafts() {
+  const p = path.join(ROOT, 'data', 'drafts.json');
+  if (!fs.existsSync(p)) return [];
+  try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return []; }
+}
+function saveDraft(draft) {
+  const p = path.join(ROOT, 'data', 'drafts.json');
+  const drafts = loadDrafts();
+  if (drafts.some((d) => d.id === draft.id)) return;
+  drafts.unshift(draft);
+  fs.writeFileSync(p, JSON.stringify(drafts, null, 2));
+}
+function syncDraftsJs() {
+  const drafts = loadDrafts();
+  fs.writeFileSync(path.join(ROOT, 'data', 'drafts.js'), `window.DRAFTS = ${JSON.stringify(drafts, null, 2)};\n`);
+}
+function writePublisherStatus({ processed, draftsCreated, errors }) {
   const status = {
     lastRun: new Date().toISOString(),
     published: processed,
-    message: processed > 0 ? 'Publicación completada correctamente' : 'No había entradas nuevas para publicar',
+    drafts: draftsCreated,
+    message:
+      processed > 0
+        ? 'Publicación completada correctamente'
+        : draftsCreated > 0
+        ? `Se crearon ${draftsCreated} borrador(es) pendientes de aprobación`
+        : 'No había entradas nuevas para publicar',
   };
 
   const statusJsonPath = path.join(ROOT, 'data', 'publisher-status.json');
@@ -350,15 +379,15 @@ function writePublisherStatus({ processed, errors }) {
   }
 }
 
-function autoGitPublish(processed) {
+function autoGitPublish(processed, draftsCreated = 0) {
   try {
     try { run('node tools/generate-seo.mjs'); } catch {}
-    run('git add data/posts.json data/posts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log sitemap.xml robots.txt 2>/dev/null || true');
+    run('git add data/posts.json data/posts.js data/drafts.json data/drafts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log sitemap.xml robots.txt 2>/dev/null || true');
     const hasChanges = run('git status --porcelain').trim().length > 0;
     if (!hasChanges) return;
 
     const stamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
-    run(`git commit -m "Auto publish: ${processed} post(s) via Gmail (${stamp})"`);
+    run(`git commit -m "Auto flow: ${processed} publish, ${draftsCreated} drafts (${stamp})"`);
     run('git push origin main');
     console.log('Auto-deploy: git push realizado');
   } catch (e) {
