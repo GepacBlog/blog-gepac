@@ -5,11 +5,23 @@ const yearPosts = posts.filter(p => p.dateObj.getFullYear() === year);
 const gepac = yearPosts.filter(p => p.editorial === 'GEPAC').length;
 const aeal = yearPosts.filter(p => p.editorial === 'AEAL').length;
 
+const monthCount = new Set(yearPosts.map(p => p.dateObj.getMonth())).size || 1;
+const avgMonthly = (yearPosts.length / monthCount).toFixed(1);
+
+const lastGepac = yearPosts
+  .filter(p => p.editorial === 'GEPAC')
+  .sort((a,b) => b.dateObj - a.dateObj)[0];
+const lastAeal = yearPosts
+  .filter(p => p.editorial === 'AEAL')
+  .sort((a,b) => b.dateObj - a.dateObj)[0];
+
 const grid = document.getElementById('metrics-grid');
 grid.innerHTML = `
   <div class="metric-card"><div class="metric-label">Total publicaciones (${year})</div><div class="metric-value">${yearPosts.length}</div></div>
   <div class="metric-card"><div class="metric-label">Editorial GEPAC</div><div class="metric-value">${gepac}</div></div>
   <div class="metric-card"><div class="metric-label">Editorial AEAL</div><div class="metric-value">${aeal}</div></div>
+  <div class="metric-card"><div class="metric-label">Última GEPAC</div><div class="metric-value" style="font-size:1rem">${lastGepac ? lastGepac.date : '—'}</div></div>
+  <div class="metric-card"><div class="metric-label">Última AEAL · Promedio/mes</div><div class="metric-value" style="font-size:1rem">${lastAeal ? lastAeal.date : '—'} · ${avgMonthly}</div></div>
 `;
 
 const monthNames = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
