@@ -95,10 +95,11 @@ function renderCard(p) {
     <article class="news-card ${cssClass}">
       <img class="thumb" src="${p.image}" alt="${escapeHTML(p.title)}" />
       <div>
-        <div class="meta"><span>${p.date}</span><span class="age-badge">${ageLabel(p.dateObj)}</span></div>
+        <div class="meta"><span>${p.date}</span></div>
         <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
         <p>${escapeHTML(p.summary)}</p>
         <a class="read-more" href="${p.url}">...Leer más</a>
+        <div class="age-bottom">${ageLabel(p.dateObj)}</div>
       </div>
     </article>
   `;
