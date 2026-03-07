@@ -43,14 +43,13 @@ body {
 }
 .site-header h1 { margin: 4px 0 8px; font-size: 1.6rem; }
 .site-header p { margin: 0; color: var(--muted); }
-.header-hero {
-  margin-top: 12px;
+.brand-strip {
+  margin: 12px auto 0;
   width: 100%;
   max-width: 860px;
-  height: 130px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 1px solid #d5dbe8;
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #00a39b 0%, #8f63d9 45%, #e78a35 100%);
 }
 .top-nav { margin-top: 12px; }
 .top-sections {
