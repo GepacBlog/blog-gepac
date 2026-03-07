@@ -36,13 +36,20 @@ body {
 .brand-head {
   display: flex;
   justify-content: center;
-  margin-bottom: 6px;
+  align-items: center;
+  margin: 0 auto 6px;
   width: 100%;
+  text-align: center;
+}
+.brand-head a {
+  display: inline-flex;
+  justify-content: center;
 }
 .gepac-logo {
   height: 44px;
   width: auto;
   display: block;
+  margin: 0 auto;
 }
 .brand-tag {
   text-align: center;
