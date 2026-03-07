@@ -17,13 +17,41 @@ body {
 }
 
 .site-header {
-  padding: 28px 20px 18px;
+  padding: 20px 20px 18px;
   text-align: center;
   border-bottom: 1px solid var(--card-border);
   background: white;
 }
-.site-header h1 { margin: 0 0 8px; font-size: 1.6rem; }
+.brand-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.gepac-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+.brand-tag {
+  font-size: .8rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: #00a39b;
+}
+.site-header h1 { margin: 4px 0 8px; font-size: 1.6rem; }
 .site-header p { margin: 0; color: var(--muted); }
+.header-hero {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 860px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #d5dbe8;
+}
 .top-nav { margin-top: 12px; }
 .top-sections {
   display: flex;
