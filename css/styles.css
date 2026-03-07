@@ -24,11 +24,8 @@ body {
 }
 .brand-head {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   width: 100%;
 }
 .gepac-logo {
@@ -37,14 +34,12 @@ body {
   display: block;
 }
 .brand-tag {
-  display: block;
-  width: 100%;
   text-align: center;
   font-size: .8rem;
   font-weight: 800;
   letter-spacing: .06em;
   color: #00a39b;
-  margin: 0 auto;
+  margin: 0 auto 6px;
 }
 .site-header h1 { margin: 4px 0 8px; font-size: 1.6rem; }
 .site-header p { margin: 0; color: var(--muted); }
