@@ -292,7 +292,7 @@ function linkifyText(htmlSafeText='') {
   let out = htmlSafeText;
   for (const { term, url } of links) {
     const re = new RegExp(`\\b${term}\\b`);
-    out = out.replace(re, `<a href="${url}" target="_blank" rel="noopener noreferrer">${term}</a>`);
+    out = out.replace(re, `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${term}</a>`);
   }
   return out;
 }
