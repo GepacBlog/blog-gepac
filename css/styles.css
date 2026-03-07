@@ -234,6 +234,12 @@ section h2 {
   border: 1px solid rgba(0,0,0,.08);
 }
 
+.news-card > div,
+.featured-card > div {
+  display: flex;
+  flex-direction: column;
+}
+
 .news-card h3 {
   margin: 0 0 6px;
   font-size: 1.08rem;
@@ -269,7 +275,9 @@ section h2 {
 }
 
 .age-bottom {
-  margin-top: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+  align-self: flex-end;
   text-align: right;
   font-size: .82rem;
   font-weight: 700;
