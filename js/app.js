@@ -6,6 +6,8 @@ const publishStatus = document.getElementById("publish-status");
 const now = new Date();
 const monthAgo = new Date(now);
 monthAgo.setMonth(monthAgo.getMonth() - 1);
+const params = new URLSearchParams(location.search);
+const editorialFilter = (params.get('ed') || 'all').toLowerCase();
 
 init();
 
@@ -18,12 +20,17 @@ async function init() {
       posts = await r.json();
     }
 
-    const latestMonthPosts = posts
+    let latestMonthPosts = posts
       .map((p, i) => ({ ...normalizePost(p, i), dateObj: new Date(p.date) }))
       .filter((p) => p.dateObj >= monthAgo && p.dateObj <= now)
       .sort((a, b) => b.dateObj - a.dateObj);
 
+    if (editorialFilter === 'gepac' || editorialFilter === 'aeal') {
+      latestMonthPosts = latestMonthPosts.filter((p) => p.editorial.toLowerCase() === editorialFilter);
+    }
+
     renderPublishStatus();
+    setNavState();
 
     if (!latestMonthPosts.length) {
       listHome.innerHTML = `<p class="empty">Sin noticias del último mes.</p>`;
@@ -118,6 +125,15 @@ function renderPublishStatus() {
     <div class="${cls}">Publicadas: ${published}</div>
     <div>${escapeHTML(s.message || '')}</div>
   `;
+}
+
+function setNavState() {
+  const all = document.getElementById('nav-all');
+  const gepac = document.getElementById('nav-gepac');
+  const aeal = document.getElementById('nav-aeal');
+  if (editorialFilter !== 'gepac' && editorialFilter !== 'aeal') all?.classList.add('active-nav');
+  if (editorialFilter === 'gepac') gepac?.classList.add('active-nav');
+  if (editorialFilter === 'aeal') aeal?.classList.add('active-nav');
 }
 
 function ageLabel(dateObj) {

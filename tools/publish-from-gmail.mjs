@@ -78,6 +78,9 @@ for (const t of threads) {
 
 syncPostsJs();
 writePublisherStatus({ processed, errors });
+if (processed > 0) {
+  autoGitPublish(processed);
+}
 console.log(`Publicadas: ${processed}`);
 
 function run(cmd) {
@@ -329,6 +332,21 @@ function writePublisherStatus({ processed, errors }) {
   fs.appendFileSync(path.join(logsDir, 'publisher.log'), `${line}\n`);
   if (errors.length) {
     fs.appendFileSync(path.join(logsDir, 'publisher-errors.log'), `${errors.join('\n')}\n`);
+  }
+}
+
+function autoGitPublish(processed) {
+  try {
+    run('git add data/posts.json data/posts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log 2>/dev/null || true');
+    const hasChanges = run('git status --porcelain').trim().length > 0;
+    if (!hasChanges) return;
+
+    const stamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
+    run(`git commit -m "Auto publish: ${processed} post(s) via Gmail (${stamp})"`);
+    run('git push origin main');
+    console.log('Auto-deploy: git push realizado');
+  } catch (e) {
+    console.error('Auto-deploy git falló:', e.message);
   }
 }
 function escapeHTML(str = '') {
