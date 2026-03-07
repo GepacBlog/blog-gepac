@@ -277,9 +277,14 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
     ? String(imageEnd).replace('./assets/', '../../../../assets/')
     : imageEnd;
 
+  const articleBg = editorial.toUpperCase() === 'GEPAC'
+    ? 'linear-gradient(135deg, #efe6ff 0%, #ffffff 100%)'
+    : 'linear-gradient(135deg, #ffeedc 0%, #ffffff 100%)';
+
   const html = `<!doctype html>
 <html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${escapeHTML(title)}</title></head>
-<body style="font-family:Inter,system-ui,sans-serif;max-width:800px;margin:30px auto;padding:0 16px;line-height:1.6;color:#222">
+<body style="font-family:Inter,system-ui,sans-serif;background:${articleBg};padding:20px;color:#222">
+<div style="max-width:800px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:12px;padding:20px;line-height:1.6;">
 <a href="../../../../index.html">← Volver a portada</a>
 <h1>${escapeHTML(title)}</h1>
 <div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(editorial)} · ${escapeHTML(dateISO)} · ${escapeHTML(author)}</div>
@@ -287,6 +292,7 @@ ${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHT
 <p>${escapeHTML(summary)}</p>
 ${content.split(/\n\n+/).map((p) => `<p>${escapeHTML(p)}</p>`).join('\n')}
 ${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
+</div>
 </body></html>`;
 
   fs.writeFileSync(filePath, html);
