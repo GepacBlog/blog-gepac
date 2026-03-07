@@ -200,6 +200,12 @@ function buildHtml({title, editorial, author, dateISO, summary, body, imgMain, i
   const headTitle = escapeHTML(seoTitle || title);
   const metaDesc = escapeHTML(metaDescription || summary || title);
 
+  const summaryHtml = linkifyText(escapeHTML(summary));
+  const bodyHtml = body
+    .split(/\n\n+/)
+    .map(p => `<p>${linkifyText(escapeHTML(p))}</p>`)
+    .join('\n');
+
   return `<!doctype html>
 <html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>${headTitle}</title>
@@ -214,8 +220,8 @@ ${kw ? `<meta name="keywords" content="${escapeHTML(kw)}"/>` : ''}
 <h1>${escapeHTML(title)}</h1>
 <div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(editorial)} · ${escapeHTML(dateISO)} · ${escapeHTML(author)}</div>
 ${imgMain ? `<img src="${escapeHTML(toArticlePath(imgMain))}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>` : ''}
-<p>${escapeHTML(summary)}</p>
-${body.split(/\n\n+/).map(p=>`<p>${escapeHTML(p)}</p>`).join('\n')}
+<p>${summaryHtml}</p>
+${bodyHtml}
 ${imgEnd ? `<p><img src="${escapeHTML(toArticlePath(imgEnd))}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
 </div></body></html>`;
 }
@@ -272,6 +278,23 @@ function escapeHTML(str='') {
     .replaceAll('>','&gt;')
     .replaceAll('"','&quot;')
     .replaceAll("'",'&#39;');
+}
+
+function linkifyText(htmlSafeText='') {
+  const links = [
+    { term: 'GEPAC', url: 'https://www.gepac.es' },
+    { term: 'AEAL', url: 'https://www.aeal.es' },
+    { term: 'URJC', url: 'https://www.urjc.es' },
+    { term: 'CRIS', url: 'https://criscancer.org' },
+    { term: 'Sanofi', url: 'https://www.sanofi.es' }
+  ];
+
+  let out = htmlSafeText;
+  for (const { term, url } of links) {
+    const re = new RegExp(`\\b${term}\\b`);
+    out = out.replace(re, `<a href="${url}" target="_blank" rel="noopener noreferrer">${term}</a>`);
+  }
+  return out;
 }
 
 function quote(s){ return `'${String(s).replace(/'/g, `'\\''`)}'`; }
