@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gepacblog.github.io/blog-gepac/sitemap.xml

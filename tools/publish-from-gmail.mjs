@@ -352,7 +352,8 @@ function writePublisherStatus({ processed, errors }) {
 
 function autoGitPublish(processed) {
   try {
-    run('git add data/posts.json data/posts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log 2>/dev/null || true');
+    try { run('node tools/generate-seo.mjs'); } catch {}
+    run('git add data/posts.json data/posts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log sitemap.xml robots.txt 2>/dev/null || true');
     const hasChanges = run('git status --porcelain').trim().length > 0;
     if (!hasChanges) return;
 

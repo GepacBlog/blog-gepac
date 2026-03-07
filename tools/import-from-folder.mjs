@@ -93,6 +93,8 @@ posts.sort((a,b)=> new Date(b.date) - new Date(a.date));
 fs.writeFileSync(path.join(ROOT, 'data', 'posts.json'), JSON.stringify(posts, null, 2));
 fs.writeFileSync(path.join(ROOT, 'data', 'posts.js'), `window.POSTS = ${JSON.stringify(posts, null, 2)};\n`);
 
+try { execSync('node tools/generate-seo.mjs', { stdio: 'ignore' }); } catch {}
+
 console.log(`Importadas: ${posts.length}`);
 
 function walk(dir) {
