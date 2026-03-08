@@ -56,6 +56,29 @@ for (const t of threads) {
       ? copyImageToAssets(secondaryImagePath, editorial, dateISO, title, '02')
       : '';
 
+    const review = reviewQuality({ summary, content, bodyText, title });
+    if (!review.ok) {
+      saveDraft({
+        id: `d-${t.id}`,
+        threadId: t.id,
+        account: ACCOUNT,
+        createdAt: new Date().toISOString(),
+        editorial,
+        dateISO,
+        title,
+        summary,
+        content,
+        author,
+        imageMain: imageForCards,
+        imageEnd: imageForEnd,
+        reviewIssues: review.issues,
+        sourceSubject: headers.subject || subject || title,
+      });
+      run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
+      draftsCreated += 1;
+      continue;
+    }
+
     const relUrl = createArticle({
       editorial,
       dateISO,
@@ -216,6 +239,29 @@ function sanitizeBody(src='') {
     .filter((ln) => !/^\s*[•\-*]\s+/.test(ln))
     .join('\n')
     .trim();
+}
+
+function reviewQuality({ summary = '', content = '', bodyText = '', title = '' }) {
+  const issues = [];
+  const combined = `${summary}\n${content}\n${bodyText}`;
+
+  if (!title || title.trim().length < 8) issues.push('Título demasiado corto o vacío');
+  if (!summary || summary.trim().length < 70) issues.push('Resumen demasiado corto');
+  if (!content || content.trim().length < 400) issues.push('Contenido demasiado corto');
+
+  const badPatterns = [
+    /\bDe:\s/i,
+    /\bEnviado:\s/i,
+    /\bPara:\s/i,
+    /\bAsunto:\s/i,
+    /\bKeywords?\b/i,
+    /\bTitle\s*SEO\b/i,
+    /\bMeta\s*description\b/i,
+    /\bFirma editorial\b/i,
+  ];
+  if (badPatterns.some((re) => re.test(combined))) issues.push('Texto interno/encabezado detectado');
+
+  return { ok: issues.length === 0, issues };
 }
 function toISODate(d) {
   return d.toISOString().slice(0, 10);
