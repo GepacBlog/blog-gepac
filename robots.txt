@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /panel-redaccion-7Kf9mQ.html
 
 Sitemap: https://gepacblog.github.io/blog-gepac/sitemap.xml
