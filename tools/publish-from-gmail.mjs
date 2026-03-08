@@ -56,11 +56,7 @@ for (const t of threads) {
       ? copyImageToAssets(secondaryImagePath, editorial, dateISO, title, '02')
       : '';
 
-    saveDraft({
-      id: `d-${t.id}`,
-      threadId: t.id,
-      account: ACCOUNT,
-      createdAt: new Date().toISOString(),
+    const relUrl = createArticle({
       editorial,
       dateISO,
       title,
@@ -69,11 +65,22 @@ for (const t of threads) {
       author,
       imageMain: imageForCards,
       imageEnd: imageForEnd,
-      sourceSubject: headers.subject || subject || title,
+    });
+
+    upsertPost({
+      editorial,
+      date: dateISO,
+      title,
+      summary,
+      image: imageForCards,
+      url: relUrl,
+      author,
+      category: editorial,
+      comments: 0,
     });
 
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
-    draftsCreated += 1;
+    processed += 1;
   } catch (err) {
     const msg = `Error en hilo ${t.id}: ${err.message}`;
     errors.push(msg);
