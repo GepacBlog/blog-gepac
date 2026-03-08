@@ -389,13 +389,35 @@ function writePublisherStatus({ processed, draftsCreated, errors }) {
 function autoGitPublish(processed, draftsCreated = 0) {
   try {
     try { run('node tools/generate-seo.mjs'); } catch {}
-    run('git add data/posts.json data/posts.js data/drafts.json data/drafts.js data/publisher-status.json data/publisher-status.js historicos assets logs/publisher.log logs/publisher-errors.log sitemap.xml robots.txt 2>/dev/null || true');
+
+    // 1) stage
+    run('git add -A');
+
+    // 2) commit if needed
     const hasChanges = run('git status --porcelain').trim().length > 0;
-    if (!hasChanges) return;
+    if (!hasChanges) {
+      console.log('Auto-deploy: sin cambios para subir');
+      return;
+    }
 
     const stamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
-    run(`git commit -m "Auto flow: ${processed} publish, ${draftsCreated} drafts (${stamp})"`);
-    run('git push origin main');
+    try {
+      run(`git commit -m "Auto flow: ${processed} publish, ${draftsCreated} drafts (${stamp})"`);
+    } catch (e) {
+      // si otro proceso ya dejó todo limpio
+      const stillChanges = run('git status --porcelain').trim().length > 0;
+      if (stillChanges) throw e;
+    }
+
+    // 3) sync remote + push (retry simple)
+    try { run('git pull --rebase origin main'); } catch {}
+    try {
+      run('git push origin main');
+    } catch {
+      run('git pull --rebase origin main');
+      run('git push origin main');
+    }
+
     console.log('Auto-deploy: git push realizado');
   } catch (e) {
     console.error('Auto-deploy git falló:', e.message);
