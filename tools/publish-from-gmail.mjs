@@ -12,10 +12,12 @@ fs.mkdirSync(TMP, { recursive: true });
 
 const search = runJson(`gog gmail search "${QUERY}" --account ${ACCOUNT} --max 20 --json --no-input`);
 const threads = search?.threads || [];
+const processedThreads = loadProcessedThreads();
 
 let processed = 0;
 const errors = [];
 for (const t of threads) {
+  if (processedThreads.has(t.id)) continue;
   try {
     const subject = t.subject || '';
 
@@ -79,6 +81,7 @@ for (const t of threads) {
     });
 
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
+    markThreadProcessed(t.id);
     processed += 1;
   } catch (err) {
     const msg = `Error en hilo ${t.id}: ${err.message}`;
@@ -373,6 +376,25 @@ function loadDrafts() {
   const p = path.join(ROOT, 'data', 'drafts.json');
   if (!fs.existsSync(p)) return [];
   try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return []; }
+}
+
+function loadProcessedThreads() {
+  const p = path.join(ROOT, 'data', 'processed-threads.json');
+  if (!fs.existsSync(p)) return new Set();
+  try {
+    const arr = JSON.parse(fs.readFileSync(p, 'utf8'));
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function markThreadProcessed(id) {
+  const p = path.join(ROOT, 'data', 'processed-threads.json');
+  const current = Array.from(loadProcessedThreads());
+  if (!current.includes(id)) current.unshift(id);
+  const trimmed = current.slice(0, 500);
+  fs.writeFileSync(p, JSON.stringify(trimmed, null, 2));
 }
 function saveDraft(draft) {
   const p = path.join(ROOT, 'data', 'drafts.json');
