@@ -26,8 +26,6 @@
         <h2>Panel privado de redacción</h2>
         <p class="note">Acceso restringido.</p>
         <input id="pin" type="password" placeholder="PIN" />
-        <input id="api-url" type="text" placeholder="API URL (ej: http://localhost:8787/api o URL túnel)" style="margin-top:8px" />
-        <input id="api-key" type="password" placeholder="API Key" style="margin-top:8px" />
         <div class="actions" style="margin-top:10px">
           <button id="enter">Entrar</button>
         </div>
@@ -51,27 +49,18 @@
     <script>
       const PIN = 'Gepac$';
       const BASE = 'https://gepacblog.github.io/blog-gepac';
-      let API = localStorage.getItem('gepac_api') || 'http://localhost:8787/api';
-      let API_KEY = localStorage.getItem('gepac_api_key') || 'Gepac$';
+      const API = 'http://localhost:8787/api';
+      const API_KEY = 'Gepac$';
 
       const login = document.getElementById('login');
       const panel = document.getElementById('panel');
       const pinInput = document.getElementById('pin');
-      const apiUrlInput = document.getElementById('api-url');
-      const apiKeyInput = document.getElementById('api-key');
       const loginMsg = document.getElementById('login-msg');
       const msg = document.getElementById('msg');
       const draftsNode = document.getElementById('drafts');
 
-      apiUrlInput.value = API;
-      apiKeyInput.value = API_KEY;
-
       document.getElementById('enter').onclick = () => {
         if (pinInput.value === PIN) {
-          API = apiUrlInput.value.trim() || API;
-          API_KEY = apiKeyInput.value || API_KEY;
-          localStorage.setItem('gepac_api', API);
-          localStorage.setItem('gepac_api_key', API_KEY);
           sessionStorage.setItem('gepac_panel_ok', '1');
           showPanel();
         } else {
