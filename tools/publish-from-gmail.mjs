@@ -213,6 +213,7 @@ function sanitizeBody(src='') {
     .filter((ln) => !/^\s*(De:|Enviado:|Para:|Asunto:)\b/i.test(ln))
     .filter((ln) => !/^\s*Serie\s+(GEPAC|AEAL)\b/i.test(ln))
     .filter((ln) => !/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial)\b/i.test(ln))
+    .filter((ln) => !/^\s*[•\-*]\s+/.test(ln))
     .join('\n')
     .trim();
 }
