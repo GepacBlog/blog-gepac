@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <title>Panel privado · Redacción</title>
+    <style>
+      body{font-family:Inter,system-ui,sans-serif;background:#f3f1ec;margin:0;color:#1f2533}
+      .wrap{max-width:900px;margin:18px auto;padding:0 12px}
+      .box{background:#fff;border:1px solid #dde3ee;border-radius:12px;padding:14px}
+      .hidden{display:none}
+      input{width:100%;padding:10px;border:1px solid #ccd4e1;border-radius:8px}
+      button{padding:8px 12px;border:1px solid #cfd7e5;border-radius:8px;background:#fff;font-weight:700;cursor:pointer}
+      .ok{background:#1f7a3e;color:#fff;border-color:#1f7a3e}
+      .warn{background:#8b4f10;color:#fff;border-color:#8b4f10}
+      .draft{margin-top:10px;padding:10px;border:1px solid #e1e6f0;border-radius:10px;background:#fff}
+      .meta{font-size:.85rem;color:#667084;margin-bottom:6px}
+      .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+      .note{font-size:.9rem;color:#4c5670}
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div id="login" class="box">
+        <h2>Panel privado de redacción</h2>
+        <p class="note">Acceso restringido.</p>
+        <input id="pin" type="password" placeholder="PIN" />
+        <div class="actions" style="margin-top:10px">
+          <button id="enter">Entrar</button>
+        </div>
+        <p id="login-msg" class="note"></p>
+      </div>
+
+      <div id="panel" class="hidden">
+        <div class="box">
+          <h2>Aprobaciones pendientes</h2>
+          <p class="note">No está enlazado públicamente. Si estás en tu Mac con la app abierta, los botones publican/descartan directamente.</p>
+          <div class="actions">
+            <button id="refresh">Refrescar</button>
+            <button id="logout">Cerrar sesión</button>
+          </div>
+          <p id="msg" class="note"></p>
+        </div>
+        <div id="drafts"></div>
+      </div>
+    </div>
+
+    <script>
+      const PIN = 'Gepac$';
+      const API = 'http://localhost:8787/api';
+      const BASE = 'https://gepacblog.github.io/blog-gepac';
+
+      const login = document.getElementById('login');
+      const panel = document.getElementById('panel');
+      const pinInput = document.getElementById('pin');
+      const loginMsg = document.getElementById('login-msg');
+      const msg = document.getElementById('msg');
+      const draftsNode = document.getElementById('drafts');
+
+      document.getElementById('enter').onclick = () => {
+        if (pinInput.value === PIN) {
+          sessionStorage.setItem('gepac_panel_ok', '1');
+          showPanel();
+        } else {
+          loginMsg.textContent = 'PIN incorrecto';
+        }
+      };
+
+      document.getElementById('logout').onclick = () => {
+        sessionStorage.removeItem('gepac_panel_ok');
+        location.reload();
+      };
+
+      document.getElementById('refresh').onclick = () => loadDrafts();
+
+      function showPanel() {
+        login.classList.add('hidden');
+        panel.classList.remove('hidden');
+        loadDrafts();
+      }
+
+      async function loadDrafts() {
+        msg.textContent = 'Cargando borradores...';
+        let drafts = [];
+        try {
+          const r = await fetch(`${API}/drafts`);
+          if (r.ok) drafts = await r.json();
+        } catch {}
+
+        if (!drafts.length) {
+          // fallback lectura pública
+          try {
+            const r2 = await fetch(`${BASE}/data/drafts.json?v=${Date.now()}`);
+            drafts = await r2.json();
+            msg.textContent = 'Borradores cargados (modo lectura pública).';
+          } catch {
+            msg.textContent = 'No se pudieron cargar borradores.';
+            draftsNode.innerHTML = '';
+            return;
+          }
+        } else {
+          msg.textContent = 'Borradores cargados (modo edición local activo).';
+        }
+
+        if (!drafts.length) {
+          draftsNode.innerHTML = '<div class="box" style="margin-top:10px">No hay borradores pendientes.</div>';
+          return;
+        }
+
+        draftsNode.innerHTML = drafts.map(d => `
+          <div class="draft">
+            <div class="meta">${d.dateISO || ''} · ${d.editorial || ''} · ${d.id}</div>
+            <strong>${escapeHtml(d.title || 'Sin título')}</strong>
+            <p>${escapeHtml(d.summary || '')}</p>
+            <div class="actions">
+              <button class="ok" onclick="approveDraft('${d.id}')">Aprobar</button>
+              <button class="warn" onclick="rejectDraft('${d.id}')">Descartar</button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      async function approveDraft(id) {
+        try {
+          const r = await fetch(`${API}/drafts/approve`, {
+            method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id})
+          });
+          const j = await r.json();
+          msg.textContent = j.ok ? `Aprobado: ${id}` : `Error: ${j.error || 'sin detalle'}`;
+          if (j.ok) loadDrafts();
+        } catch {
+          msg.textContent = 'No disponible desde aquí. Usa app-gepac en tu Mac para aprobar.';
+        }
+      }
+
+      async function rejectDraft(id) {
+        try {
+          const r = await fetch(`${API}/drafts/reject`, {
+            method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({id})
+          });
+          const j = await r.json();
+          msg.textContent = j.ok ? `Descartado: ${id}` : `Error: ${j.error || 'sin detalle'}`;
+          if (j.ok) loadDrafts();
+        } catch {
+          msg.textContent = 'No disponible desde aquí. Usa app-gepac en tu Mac para descartar.';
+        }
+      }
+
+      function escapeHtml(s='') {
+        return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+      }
+
+      if (sessionStorage.getItem('gepac_panel_ok') === '1') showPanel();
+    </script>
+  </body>
+</html>
