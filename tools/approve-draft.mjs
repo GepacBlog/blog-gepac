@@ -72,6 +72,12 @@ function createArticle(d) {
     ? 'linear-gradient(135deg, #efe6ff 0%, #ffffff 100%)'
     : 'linear-gradient(135deg, #ffeedc 0%, #ffffff 100%)';
 
+  const linkedSummary = applySeoLinks(escapeHTML(d.summary || ''), d.seoLinks || []);
+  const linkedBody = String(d.content || '')
+    .split(/\n\n+/)
+    .map((p) => `<p>${applySeoLinks(escapeHTML(p), d.seoLinks || [])}</p>`)
+    .join('\n');
+
   const html = `<!doctype html>
 <html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>${escapeHTML(d.title)}</title>
@@ -83,8 +89,8 @@ function createArticle(d) {
 <h1>${escapeHTML(d.title)}</h1>
 <div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(d.editorial)} · ${escapeHTML(d.dateISO)} · ${escapeHTML(d.author || '')}</div>
 ${imgMain ? `<img src="${escapeHTML(imgMain)}" alt="${escapeHTML(d.title)}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>` : ''}
-<p>${escapeHTML(d.summary || '')}</p>
-${String(d.content || '').split(/\n\n+/).map((p) => `<p>${escapeHTML(p)}</p>`).join('\n')}
+<p>${linkedSummary}</p>
+${linkedBody}
 ${imgEnd ? `<p><img src="${escapeHTML(imgEnd)}" alt="${escapeHTML(d.title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
 </div></body></html>`;
 
@@ -109,4 +115,18 @@ function escapeHTML(str='') {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function applySeoLinks(htmlSafeText = '', links = []) {
+  let out = htmlSafeText;
+  for (const l of links) {
+    if (!l?.term || !l?.url) continue;
+    const esc = l.term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`\\b${esc}\\b`);
+    out = out.replace(
+      re,
+      `<a href="${l.url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${l.term}</a>`
+    );
+  }
+  return out;
 }

@@ -1,5 +1,24 @@
 window.DRAFTS = [
   {
+    "id": "d-19ccc7ea5868a222",
+    "threadId": "19ccc7ea5868a222",
+    "account": "agentekrok@gmail.com",
+    "createdAt": "2026-03-08T08:10:05.487Z",
+    "editorial": "GEPAC",
+    "dateISO": "2026-03-08",
+    "title": "VI Edición Distinciones “Dama de la Lámpara”",
+    "summary": "De: F.",
+    "content": "De: F. C.H. <fcalderonhuerta@hotmail.com>\nPara: agentekrok@gmail.com <agentekrok@gmail.com>\nAsunto: Gepac VI Edición Distinciones “Dama de la Lámpara”\n\nDe: F. C.H. <fcalderonhuerta@hotmail.com>\nEnviado: domingo, 8 de marzo de 2026 1:11\nPara: agentekrok@gmail.com <agentekrok@gmail.com>\nAsunto: Gepac VI Edición Distinciones “Dama de la Lámpara”\n\n\nAbierta la convocatoria de la VI Edición Nacional de las Distinciones “Dama de la Lámpara” Florence Nightingale\n\nLa VI Edición Nacional de las Distinciones “Dama de la Lámpara” Florence Nightingale abre su convocatoria con el objetivo de reconocer y dar visibilidad a la labor humana, social y profesional de las enfermeras oncológicas que desarrollan su trabajo en hospitales públicos y privados de toda España, tanto en unidades de adultos como pediátricas.\n\nEstas distinciones han sido creadas por la Fundación Sandra Ibarra<https://fundacionsandraibarra.org/> y el Departamento de Enfermería de la Facultad de Medicina<https://www.uam.es/medicina/facultad/departamentos/enfermeria> de la Universidad Autónoma de Madrid (UAM), con la finalidad de poner en valor el papel esencial que desempeña el personal de enfermería en el abordaje integral del cáncer, así como su impacto directo en la experiencia de pacientes y supervivientes.\n\nParticipación abierta a pacientes, familiares y cuidadores\n\nHasta el 19 de abril de 2026, pacientes y supervivientes de cáncer, así como sus familiares y cuidadores, podrán votar a través de la web de la iniciativa a aquellas enfermeras oncológicas que hayan marcado la diferencia en su proceso oncológico, destacando especialmente su cercanía, empatía y compromiso humano.\n\nPodrán presentarse candidaturas de enfermeras oncológicas de hospitales públicos y privados de todo el territorio nacional. Para participar, únicamente será necesario rellenar el formulario online y proponer a la profesional en una de las categorías establecidas.\nEl periodo de votaciones se abrirá el 22 de enero de 2026 a las 00:00 horas y permanecerá activo hasta el 19 de abril de 2026 a las 23:59 horas.\n\nUn reconocimiento individual y colectivo\n\nAdemás de distinguir de forma especial a las enfermeras más votadas por los pacientes en tres categorías diferentes, las Distinciones “Dama de la Lámpara” suponen también un homenaje al trabajo colectivo de las Unidades de Enfermería, cuyo compromiso diario resulta clave para garantizar una atención sanitaria más humana y centrada en la persona.\n\nLas categorías de esta edición son:\n\n\nCeremonia de entrega en el Ateneo de Madrid\n\nLa ceremonia de entrega de las VI Distinciones “Dama de la Lámpara” Florence Nightingale tendrá lugar el 6 de mayo de 2026 a las 18:00 horas en el Ateneo de Madrid.\n\nEl acto reunirá a representantes del ámbito sanitario, académico e institucional, así como a pacientes y supervivientes, y volverá a situar en el centro a quienes cuidan desde la profesionalidad, la cercanía y la empatía.\n\nDesde la organización se anima a presentar candidaturas de hospitales de todo el país, con el fin de seguir reconociendo públicamente el valor imprescindible de la enfermería oncológica en el sistema sanitario.\n\nContenido elaborado por GEPAC · VI Edición Nacional de las Distinciones “Dama de la Lámpara”\nhttps://www.gepac.es/\n\n\nAbierta la VI edición de las Distinciones Dama de la Lámpara\n\nPacientes y familiares pueden votar hasta abril a las enfermeras oncológicas que destacan por su labor humana y social en toda España.",
+    "author": "Equipo GEPAC",
+    "imageMain": "./assets/uploads/2026-03-08_gepac_vi-edicion-distinciones-dama-de-la-lampara_01.webp",
+    "imageEnd": "",
+    "reviewIssues": [
+      "Resumen demasiado corto",
+      "Texto interno/encabezado detectado"
+    ],
+    "sourceSubject": "RV: Gepac VI Edición Distinciones “Dama de la Lámpara”"
+  },
+  {
     "id": "d-19ccac8e9ce089a6",
     "threadId": "19ccac8e9ce089a6",
     "account": "agentekrok@gmail.com",
