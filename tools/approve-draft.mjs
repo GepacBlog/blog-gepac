@@ -75,7 +75,7 @@ function createArticle(d) {
   const linkedSummary = applySeoLinks(escapeHTML(d.summary || ''), d.seoLinks || []);
   const linkedBody = String(d.content || '')
     .split(/\n\n+/)
-    .map((p) => `<p>${applySeoLinks(escapeHTML(p), d.seoLinks || [])}</p>`)
+    .map((p) => `<p>${autoLinkUrls(applySeoLinks(escapeHTML(p), d.seoLinks || []))}</p>`)
     .join('\n');
 
   const html = `<!doctype html>
@@ -129,4 +129,18 @@ function applySeoLinks(htmlSafeText = '', links = []) {
     );
   }
   return out;
+}
+
+function autoLinkUrls(htmlSafeText = '') {
+  return String(htmlSafeText).replace(
+    /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/g,
+    (m, url) => {
+      let label = url;
+      try {
+        const host = new URL(url).hostname.replace(/^www\./, '');
+        label = host;
+      } catch {}
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${label}</a>`;
+    }
+  );
 }

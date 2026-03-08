@@ -189,6 +189,8 @@ function parseDocText(src='') {
 
 function sanitizeBody(b='') {
   return b
+    .replace(/<(https?:\/\/[^>\s]+)>/g, ' $1 ')
+    .replace(/([A-Za-zÁ-ÿ0-9])(?=https?:\/\/)/g, '$1 ')
     .replace(/_{3,}/g, '\n\n')
     .replace(/\n{3,}/g, '\n\n')
     .split(/\n/)
@@ -315,7 +317,14 @@ function linkifyText(htmlSafeText='') {
 function autoLinkUrls(htmlSafeText='') {
   return String(htmlSafeText).replace(
     /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">$1</a>'
+    (_m, url) => {
+      let label = url;
+      try {
+        const host = new URL(url).hostname.replace(/^www\./, '');
+        label = host;
+      } catch {}
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${label}</a>`;
+    }
   );
 }
 
