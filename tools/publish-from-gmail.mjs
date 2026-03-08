@@ -44,7 +44,7 @@ for (const t of threads) {
     const title = fields.title || parsed.title || 'Sin título';
     const rawContent = fields.body || bodyWithoutHeaders(bodyText) || bodyText || 'Contenido pendiente';
     const content = sanitizeBody(rawContent);
-    const summary = clampSummary(fields.summary || firstSentence(content) || 'Resumen pendiente');
+    const summary = clampSummary(fields.summary || firstCleanSentence(content) || 'Resumen pendiente');
     const author = fields.author || (editorial === 'GEPAC' ? 'Equipo GEPAC' : 'Equipo AEAL');
     const fallbackDate = toISODate(new Date(Number(message.internalDate || Date.now())));
     const dateISO = normalizeDate(fields.date) || fallbackDate;
@@ -193,6 +193,17 @@ function firstSentence(text = '') {
   if (!t) return '';
   return t.split(/(?<=[.!?])\s+/)[0].slice(0, 260);
 }
+function firstCleanSentence(text = '') {
+  const parts = String(text).split(/\n\n+/).map((x) => x.trim()).filter(Boolean);
+  for (const p of parts) {
+    if (/^(De:|Enviado:|Para:|Asunto:)/i.test(p)) continue;
+    if (/^(Serie\s+(GEPAC|AEAL)|Keywords?|Title\s*SEO|Meta\s*description|Firma editorial|Contenido elaborado por)/i.test(p)) continue;
+    if (/^https?:\/\//i.test(p)) continue;
+    if (p.length < 40) continue;
+    return firstSentence(p);
+  }
+  return firstSentence(String(text));
+}
 function clampSummary(s='') {
   const t = String(s).replace(/\s+/g,' ').trim();
   if (!t) return 'Resumen pendiente';
@@ -210,11 +221,16 @@ function sanitizeBody(src='') {
     .replace(/_{3,}/g, '\n\n')
     .replace(/\n{3,}/g, '\n\n')
     .split(/\r?\n/)
+    .map((ln) => ln.replace(/^>+\s*/, '').trim())
+    .filter(Boolean)
     .filter((ln) => !/^\s*(De:|Enviado:|Para:|Asunto:)\b/i.test(ln))
     .filter((ln) => !/^\s*Serie\s+(GEPAC|AEAL)\b/i.test(ln))
-    .filter((ln) => !/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial)\b/i.test(ln))
+    .filter((ln) => !/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial|Contenido elaborado por)\b/i.test(ln))
     .filter((ln) => !/^\s*[•\-*]\s+/.test(ln))
+    .filter((ln) => !/^https?:\/\//i.test(ln))
+    .filter((ln) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ln))
     .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
 
