@@ -304,20 +304,12 @@ function escapeHTML(str='') {
 }
 
 function linkifyText(htmlSafeText='') {
-  const links = [
-    { term: 'GEPAC', url: 'https://www.gepac.es' },
-    { term: 'AEAL', url: 'https://www.aeal.es' },
-    { term: 'URJC', url: 'https://www.urjc.es' },
-    { term: 'CRIS', url: 'https://criscancer.org' },
-    { term: 'Sanofi', url: 'https://www.sanofi.es' }
-  ];
-
-  let out = htmlSafeText;
-  for (const { term, url } of links) {
-    const re = new RegExp(`\\b${term}\\b`);
-    out = out.replace(re, `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${term}</a>`);
-  }
-  return out;
+  // Enlaces SOLO cuando el redactor los marca explícitamente:
+  // [[texto|https://url.com]]
+  return String(htmlSafeText).replace(
+    /\[\[([^|\]]+)\|([^\]]+)\]\]/g,
+    (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${text}</a>`
+  );
 }
 
 function quote(s){ return `'${String(s).replace(/'/g, `'\\''`)}'`; }
