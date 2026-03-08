@@ -14,7 +14,6 @@ const search = runJson(`gog gmail search "${QUERY}" --account ${ACCOUNT} --max 2
 const threads = search?.threads || [];
 
 let processed = 0;
-let draftsCreated = 0;
 const errors = [];
 for (const t of threads) {
   try {
@@ -56,29 +55,6 @@ for (const t of threads) {
       ? copyImageToAssets(secondaryImagePath, editorial, dateISO, title, '02')
       : '';
 
-    const review = reviewQuality({ summary, content, bodyText, title });
-    if (!review.ok) {
-      saveDraft({
-        id: `d-${t.id}`,
-        threadId: t.id,
-        account: ACCOUNT,
-        createdAt: new Date().toISOString(),
-        editorial,
-        dateISO,
-        title,
-        summary,
-        content,
-        author,
-        imageMain: imageForCards,
-        imageEnd: imageForEnd,
-        reviewIssues: review.issues,
-        sourceSubject: headers.subject || subject || title,
-      });
-      run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
-      draftsCreated += 1;
-      continue;
-    }
-
     const relUrl = createArticle({
       editorial,
       dateISO,
@@ -112,13 +88,11 @@ for (const t of threads) {
 }
 
 syncPostsJs();
-syncDraftsJs();
-writePublisherStatus({ processed, draftsCreated, errors });
-if (processed > 0 || draftsCreated > 0) {
-  autoGitPublish(processed, draftsCreated);
+writePublisherStatus({ processed, errors });
+if (processed > 0) {
+  autoGitPublish(processed);
 }
 console.log(`Publicadas: ${processed}`);
-console.log(`Borradores: ${draftsCreated}`);
 
 function run(cmd) {
   return execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -411,17 +385,11 @@ function syncDraftsJs() {
   const drafts = loadDrafts();
   fs.writeFileSync(path.join(ROOT, 'data', 'drafts.js'), `window.DRAFTS = ${JSON.stringify(drafts, null, 2)};\n`);
 }
-function writePublisherStatus({ processed, draftsCreated, errors }) {
+function writePublisherStatus({ processed, errors }) {
   const status = {
     lastRun: new Date().toISOString(),
     published: processed,
-    drafts: draftsCreated,
-    message:
-      processed > 0
-        ? 'Publicación completada correctamente'
-        : draftsCreated > 0
-        ? `Se crearon ${draftsCreated} borrador(es) pendientes de aprobación`
-        : 'No había entradas nuevas para publicar',
+    message: processed > 0 ? 'Publicación completada correctamente' : 'No había entradas nuevas para publicar',
   };
 
   const statusJsonPath = path.join(ROOT, 'data', 'publisher-status.json');
@@ -438,7 +406,7 @@ function writePublisherStatus({ processed, draftsCreated, errors }) {
   }
 }
 
-function autoGitPublish(processed, draftsCreated = 0) {
+function autoGitPublish(processed) {
   try {
     try { run('node tools/generate-seo.mjs'); } catch {}
 
@@ -454,7 +422,7 @@ function autoGitPublish(processed, draftsCreated = 0) {
 
     const stamp = new Date().toISOString().replace('T', ' ').slice(0, 16);
     try {
-      run(`git commit -m "Auto flow: ${processed} publish, ${draftsCreated} drafts (${stamp})"`);
+      run(`git commit -m "Auto flow: ${processed} publish (${stamp})"`);
     } catch (e) {
       // si otro proceso ya dejó todo limpio
       const stillChanges = run('git status --porcelain').trim().length > 0;
