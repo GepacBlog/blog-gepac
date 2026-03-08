@@ -39,7 +39,7 @@ async function init() {
 
     const [featured, ...rest] = latestMonthPosts;
     renderFeatured(featured);
-    renderList(rest.length ? rest : [featured], listHome);
+    renderList(rest, listHome);
     renderMostRead(latestMonthPosts.slice(0, 5));
   } catch {
     listHome.innerHTML = `<p class="empty">No se pudieron cargar noticias.</p>`;
