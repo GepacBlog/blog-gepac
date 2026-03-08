@@ -209,6 +209,11 @@ function sanitizeBody(src='') {
   return String(src)
     .replace(/_{3,}/g, '\n\n')
     .replace(/\n{3,}/g, '\n\n')
+    .split(/\r?\n/)
+    .filter((ln) => !/^\s*(De:|Enviado:|Para:|Asunto:)\b/i.test(ln))
+    .filter((ln) => !/^\s*Serie\s+(GEPAC|AEAL)\b/i.test(ln))
+    .filter((ln) => !/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial)\b/i.test(ln))
+    .join('\n')
     .trim();
 }
 function toISODate(d) {
