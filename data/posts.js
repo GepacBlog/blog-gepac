@@ -1,17 +1,5 @@
 window.POSTS = [
   {
-    "id": "gepac-2026-03-08-vi-edicion-distinciones-dama-de-la-lampara",
-    "editorial": "GEPAC",
-    "date": "2026-03-08",
-    "title": "VI Edición Distinciones “Dama de la Lámpara”",
-    "summary": "Abierta la convocatoria de la VI Edición de las Distinciones “Dama de la Lámpara” para reconocer la labor humana, social y profesional de la enfermería oncológica en España.",
-    "image": "./assets/uploads/2026-03-08_gepac_vi-edicion-distinciones-dama-de-la-lampara_01.webp",
-    "url": "./historicos/2026/03-marzo/gepac/005_2026-03-08_vi-edicion-distinciones-dama-de-la-lampara.html",
-    "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
-  },
-  {
     "id": "aeal-2026-03-07-la-eicr-cronica-una-enfermedad-invisible-tras-el-trasplante-de-medula-osea-que-requiere-un-abordaje-integral",
     "editorial": "AEAL",
     "date": "2026-03-07",
@@ -129,18 +117,6 @@ window.POSTS = [
     "url": "./historicos/2026/02-febrero/aeal/001_2026-02-02_la-eicr-cronica-una-enfermedad-invisible-tras-el-trasplante-de-medula-osea-que-requiere-un-abordaje-integral.html",
     "author": "Equipo AEAL",
     "category": "AEAL",
-    "comments": 0
-  },
-  {
-    "id": "gepac-2026-02-01-vi-edicion-distinciones-dama-de-la-lampara",
-    "editorial": "GEPAC",
-    "date": "2026-02-01",
-    "title": "VI Edición Distinciones “Dama de la Lámpara”",
-    "summary": "Abierta la convocatoria de la VI Edición de las Distinciones “Dama de la Lámpara” para reconocer la labor humana, social y profesional de la enfermería oncológica en España.",
-    "image": "./assets/uploads/2026-02-01_gepac_vi-edicion-distinciones-dama-de-la-lampara_01.webp",
-    "url": "./historicos/2026/02-febrero/gepac/001_2026-02-01_vi-edicion-distinciones-dama-de-la-lampara.html",
-    "author": "Equipo GEPAC",
-    "category": "GEPAC",
     "comments": 0
   },
   {
