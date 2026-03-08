@@ -358,7 +358,7 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
 <div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(editorial)} · ${escapeHTML(dateISO)} · ${escapeHTML(author)}</div>
 ${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>` : ''}
 <p>${escapeHTML(summary)}</p>
-${content.split(/\n\n+/).map((p) => `<p>${escapeHTML(p)}</p>`).join('\n')}
+${content.split(/\n\n+/).map((p) => `<p>${autoLinkUrls(escapeHTML(p))}</p>`).join('\n')}
 ${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
 </div>
 </body></html>`;
@@ -493,4 +493,11 @@ function escapeHTML(str = '') {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function autoLinkUrls(htmlSafeText = '') {
+  return String(htmlSafeText).replace(
+    /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">$1</a>'
+  );
 }

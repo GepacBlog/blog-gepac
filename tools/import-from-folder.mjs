@@ -214,10 +214,10 @@ function buildHtml({title, editorial, author, dateISO, summary, body, imgMain, i
   const headTitle = escapeHTML(seoTitle || title);
   const metaDesc = escapeHTML(metaDescription || summary || title);
 
-  const summaryHtml = linkifyText(escapeHTML(summary));
+  const summaryHtml = autoLinkUrls(linkifyText(escapeHTML(summary)));
   const bodyHtml = body
     .split(/\n\n+/)
-    .map(p => `<p>${linkifyText(escapeHTML(p))}</p>`)
+    .map(p => `<p>${autoLinkUrls(linkifyText(escapeHTML(p)))}</p>`)
     .join('\n');
 
   return `<!doctype html>
@@ -309,6 +309,13 @@ function linkifyText(htmlSafeText='') {
   return String(htmlSafeText).replace(
     /\[\[([^|\]]+)\|([^\]]+)\]\]/g,
     (_m, text, url) => `<a href="${url}" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">${text}</a>`
+  );
+}
+
+function autoLinkUrls(htmlSafeText='') {
+  return String(htmlSafeText).replace(
+    /(https?:\/\/[\w\-._~:/?#[\]@!$&'()*+,;=%]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#0a66cc;text-decoration:underline;text-underline-offset:2px;font-weight:600;">$1</a>'
   );
 }
 
