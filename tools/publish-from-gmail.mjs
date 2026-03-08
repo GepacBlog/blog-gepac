@@ -4,7 +4,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 
 const ACCOUNT = process.env.BLOG_MAIL_ACCOUNT || 'agentekrok@gmail.com';
-const QUERY = process.env.BLOG_MAIL_QUERY || '(in:important OR (in:inbox is:unread))';
+const QUERY = process.env.BLOG_MAIL_QUERY || '(in:important OR in:inbox)';
 const ROOT = path.resolve(process.cwd());
 const TMP = path.join(ROOT, '.mail_tmp');
 
