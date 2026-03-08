@@ -353,8 +353,13 @@ ${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeH
 function upsertPost(post) {
   const pth = path.join(ROOT, 'data', 'posts.json');
   const posts = JSON.parse(fs.readFileSync(pth, 'utf8'));
-  posts.unshift({
-    id: `${post.editorial.toLowerCase()}-${post.date}-${slugify(post.title)}`,
+  const id = `${post.editorial.toLowerCase()}-${post.date}-${slugify(post.title)}`;
+
+  // evita duplicados por id (mismo editorial+fecha+slug)
+  const filtered = posts.filter((p) => p.id !== id);
+
+  filtered.unshift({
+    id,
     editorial: post.editorial,
     date: post.date,
     title: post.title,
@@ -365,8 +370,8 @@ function upsertPost(post) {
     category: post.category,
     comments: post.comments,
   });
-  posts.sort((a,b)=> new Date(b.date)-new Date(a.date));
-  fs.writeFileSync(pth, JSON.stringify(posts, null, 2));
+  filtered.sort((a,b)=> new Date(b.date)-new Date(a.date));
+  fs.writeFileSync(pth, JSON.stringify(filtered, null, 2));
 }
 function syncPostsJs() {
   const posts = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'posts.json'), 'utf8'));
