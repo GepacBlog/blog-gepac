@@ -66,6 +66,21 @@ Se genera automáticamente `data/control_autoria.csv` con columnas:
 
 Puedes abrir ese `.csv` directamente con Excel.
 
+## Control de menciones (auditoría patrocinadores)
+Se genera `data/control_menciones.csv` con detecciones por artículo:
+- fecha, hora, editor, título, thread_id
+- tipo (farmaceutica/asociacion/entidad)
+- entidad detectada
+
+## Informe mensual automático
+Script: `tools/reporte-mensual.mjs`
+
+Genera en `reports/`:
+- `informe-YYYY-MM.md`
+- `informe-YYYY-MM.csv`
+
+Cron activo: **día 1 de cada mes, 09:00 (Europe/Madrid)** con envío de resumen por Telegram.
+
 ## Backup automático
 Script de backup: `tools/backup-blog.sh`
 
