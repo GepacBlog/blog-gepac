@@ -18,9 +18,14 @@ async function init() {
       posts = await r.json();
     }
 
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+
     let latestMonthPosts = posts
       .map((p, i) => ({ ...normalizePost(p, i), dateObj: new Date(p.date) }))
       .filter((p) => isWithinLastNDays(p.date, 30))
+      .filter((p) => p.dateObj.getMonth() === currentMonth && p.dateObj.getFullYear() === currentYear)
       .sort((a, b) => b.dateObj - a.dateObj);
 
     if (editorialFilter === 'gepac' || editorialFilter === 'aeal') {
@@ -32,13 +37,10 @@ async function init() {
 
     if (!latestMonthPosts.length) {
       listHome.innerHTML = `<p class="empty">Sin noticias del último mes.</p>`;
-      featuredHome.innerHTML = "";
       mostRead.innerHTML = "";
       return;
     }
 
-    // Destacada desactivada por decisión editorial (evitar arrastres/caché de portada)
-    featuredHome.innerHTML = '';
     renderList(latestMonthPosts, listHome);
     renderMostRead(latestMonthPosts.slice(0, 5));
   } catch {
