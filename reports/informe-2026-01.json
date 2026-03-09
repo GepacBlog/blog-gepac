@@ -8,8 +8,15 @@
   "byEmail": {
     "(sin email histórico)": 3
   },
-  "byType": {},
-  "byEntity": {},
+  "byType": {
+    "asociacion": 4,
+    "farmaceutica": 1
+  },
+  "byEntity": {
+    "GEPAC": 3,
+    "Sanofi": 1,
+    "AEAL": 1
+  },
   "posts": [
     {
       "date": "2026-01-03",

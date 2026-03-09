@@ -7,4 +7,10 @@
 - (sin email histórico): 3
 
 ## Menciones (auditoría patrocinadores)
-- Sin menciones detectadas
+- Total menciones detectadas: **5**
+- Farmacéuticas: **1** · Asociaciones: **4** · Entidades: **0**
+
+### Top entidades mencionadas
+- GEPAC: 3
+- Sanofi: 1
+- AEAL: 1

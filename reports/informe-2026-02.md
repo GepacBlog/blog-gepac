@@ -7,4 +7,10 @@
 - (sin email histórico): 6
 
 ## Menciones (auditoría patrocinadores)
-- Sin menciones detectadas
+- Total menciones detectadas: **8**
+- Farmacéuticas: **0** · Asociaciones: **7** · Entidades: **1**
+
+### Top entidades mencionadas
+- GEPAC: 6
+- Congreso de los Diputados: 1
+- AEAL: 1

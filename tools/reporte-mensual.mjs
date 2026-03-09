@@ -17,9 +17,24 @@ if (!yy || !mm) {
 
 const autoria = readCsv(path.join(dataDir, 'control_autoria.csv'));
 const menciones = readCsv(path.join(dataDir, 'control_menciones.csv'));
+const posts = JSON.parse(fs.readFileSync(path.join(dataDir, 'posts.json'), 'utf8'));
 
-const monthRows = autoria.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
+let monthRows = autoria.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
 const mencRows = menciones.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
+const monthPosts = posts.filter((p) => String(p.date || '').startsWith(`${yy}-${mm}`));
+
+// Fallback para meses previos sin log de autoría histórico
+if (monthRows.length === 0 && monthPosts.length > 0) {
+  monthRows = monthPosts.map((p) => ({
+    fecha: p.date,
+    hora: '00:00:00',
+    editor: p.editorial,
+    email_remitente: '(sin email histórico)',
+    autor_detectado: p.author || '',
+    titulo: p.title,
+    thread_id: p.id,
+  }));
+}
 
 const total = monthRows.length;
 const byEditor = countBy(monthRows, 'editor');
@@ -70,6 +85,7 @@ const summary = {
   byEmail,
   byType,
   byEntity,
+  posts: monthPosts.map((p) => ({ date: p.date, editorial: p.editorial, title: p.title })),
 };
 fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
 

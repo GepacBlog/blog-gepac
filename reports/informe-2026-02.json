@@ -8,8 +8,15 @@
   "byEmail": {
     "(sin email histórico)": 6
   },
-  "byType": {},
-  "byEntity": {},
+  "byType": {
+    "asociacion": 7,
+    "entidad": 1
+  },
+  "byEntity": {
+    "GEPAC": 6,
+    "Congreso de los Diputados": 1,
+    "AEAL": 1
+  },
   "posts": [
     {
       "date": "2026-02-06",

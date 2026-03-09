@@ -1,5 +1,5 @@
 window.PUBLISH_STATUS = {
-  "lastRun": "2026-03-08T08:26:13.799Z",
-  "published": 2,
-  "message": "Publicación completada correctamente"
+  "lastRun": "2026-03-09T19:55:03.701Z",
+  "published": 0,
+  "message": "No había entradas nuevas para publicar"
 };

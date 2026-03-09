@@ -1,0 +1,44 @@
+{
+  "period": "2026-03",
+  "total": 4,
+  "byEditor": {
+    "AEAL": 1,
+    "GEPAC": 3
+  },
+  "byEmail": {
+    "(sin email histórico)": 4
+  },
+  "byType": {
+    "asociacion": 6,
+    "entidad": 2
+  },
+  "byEntity": {
+    "GEPAC": 4,
+    "AEAL": 1,
+    "CRIS": 1,
+    "UCM": 1,
+    "URJC": 1
+  },
+  "posts": [
+    {
+      "date": "2026-03-07",
+      "editorial": "AEAL",
+      "title": "La EICR crónica: una enfermedad invisible tras el trasplante de médula ósea que requiere un abordaje integral"
+    },
+    {
+      "date": "2026-03-03",
+      "editorial": "GEPAC",
+      "title": "La Cátedra Extraordinaria CRIS-UCM impulsa el futuro de los médicos investigadores en España"
+    },
+    {
+      "date": "2026-03-02",
+      "editorial": "GEPAC",
+      "title": "Los XIV Premios GEPAC reconocerán las “Obras que cambian vidas” en oncología"
+    },
+    {
+      "date": "2026-03-01",
+      "editorial": "GEPAC",
+      "title": "El liderazgo en organizaciones de pacientes da un paso histórico con el nuevo Máster Universitario impulsado por URJC y GEPAC"
+    }
+  ]
+}
