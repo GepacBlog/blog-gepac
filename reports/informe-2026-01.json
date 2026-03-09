@@ -1,0 +1,30 @@
+{
+  "period": "2026-01",
+  "total": 3,
+  "byEditor": {
+    "GEPAC": 2,
+    "AEAL": 1
+  },
+  "byEmail": {
+    "(sin email histórico)": 3
+  },
+  "byType": {},
+  "byEntity": {},
+  "posts": [
+    {
+      "date": "2026-01-03",
+      "editorial": "GEPAC",
+      "title": "Cadena Humana “Por 12 Millones de Pasos”: caminar juntos por la prevención del cáncer"
+    },
+    {
+      "date": "2026-01-02",
+      "editorial": "GEPAC",
+      "title": "Serie GEPAC · Firma del convenio con Farmaindustria"
+    },
+    {
+      "date": "2026-01-01",
+      "editorial": "AEAL",
+      "title": "Serie AEAL · EICR Crónica"
+    }
+  ]
+}

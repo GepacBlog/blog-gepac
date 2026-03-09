@@ -1,8 +1,45 @@
 {
   "period": "2026-02",
-  "total": 0,
-  "byEditor": {},
-  "byEmail": {},
+  "total": 6,
+  "byEditor": {
+    "GEPAC": 5,
+    "AEAL": 1
+  },
+  "byEmail": {
+    "(sin email histórico)": 6
+  },
   "byType": {},
-  "byEntity": {}
+  "byEntity": {},
+  "posts": [
+    {
+      "date": "2026-02-06",
+      "editorial": "GEPAC",
+      "title": "VIII Cumbre Española contra el Cáncer"
+    },
+    {
+      "date": "2026-02-05",
+      "editorial": "GEPAC",
+      "title": "La Fundación Leucemia y Linfoma convoca la Beca “Asun Almajano” 2026 para impulsar la investigación en enfermedades oncohematológicas"
+    },
+    {
+      "date": "2026-02-04",
+      "editorial": "GEPAC",
+      "title": "Desayuno LevinTalks"
+    },
+    {
+      "date": "2026-02-03",
+      "editorial": "GEPAC",
+      "title": "Día Mundial contra el Cáncer"
+    },
+    {
+      "date": "2026-02-02",
+      "editorial": "GEPAC",
+      "title": "Taller de Maquillaje junto a Pierre Fabre y Skin Cancer"
+    },
+    {
+      "date": "2026-02-02",
+      "editorial": "AEAL",
+      "title": "La EICR crónica: una enfermedad invisible tras el trasplante de médula ósea que requiere un abordaje integral"
+    }
+  ]
 }

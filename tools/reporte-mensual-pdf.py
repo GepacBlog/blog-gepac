@@ -47,6 +47,7 @@ def main():
     by_email = data.get("byEmail", {})
     by_type = data.get("byType", {})
     by_entity = data.get("byEntity", {})
+    posts = data.get("posts", [])
 
     summary_text = (
         f"Durante el periodo {period} se registraron <b>{total}</b> publicaciones en el blog. "
@@ -84,12 +85,27 @@ def main():
     story.append(Paragraph("Menciones detectadas (potenciales patrocinadores/entidades)", styles["H2"]))
     mention_rows = [["Entidad", "Nº menciones"]]
     for k, v in sorted(by_entity.items(), key=lambda x: x[1], reverse=True)[:25]:
-        mention_rows.append([k, str(v)])
+        mention_rows.append([Paragraph(str(k), styles["Normal"]), str(v)])
     if len(mention_rows) == 1:
         mention_rows.append(["Sin menciones", "0"])
     mention_table = Table(mention_rows, colWidths=[360, 120])
     style_table(mention_table)
     story.append(mention_table)
+    story.append(Spacer(1, 16))
+
+    story.append(Paragraph("Detalle de artículos del periodo", styles["H2"]))
+    post_rows = [["Fecha", "Editorial", "Título"]]
+    for p in sorted(posts, key=lambda x: x.get('date',''), reverse=True):
+      post_rows.append([
+          p.get('date',''),
+          p.get('editorial',''),
+          Paragraph(str(p.get('title','')), styles["Normal"]),
+      ])
+    if len(post_rows) == 1:
+      post_rows.append(["—", "—", "Sin artículos en el periodo"])
+    post_table = Table(post_rows, colWidths=[80, 90, 300])
+    style_table(post_table)
+    story.append(post_table)
 
     doc.build(story)
     print(str(out_pdf))

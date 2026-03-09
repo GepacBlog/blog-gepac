@@ -1,10 +1,10 @@
 # Informe mensual blog · 2026-02
 
-- Publicaciones registradas: **0**
-- GEPAC: **0** · AEAL: **0**
+- Publicaciones registradas: **6**
+- GEPAC: **5** · AEAL: **1**
 
 ## Autoría (por email remitente)
-- Sin datos
+- (sin email histórico): 6
 
 ## Menciones (auditoría patrocinadores)
 - Sin menciones detectadas
