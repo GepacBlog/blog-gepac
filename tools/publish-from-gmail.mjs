@@ -32,6 +32,7 @@ for (const t of threads) {
     if (!message) continue;
 
     const headers = mapHeaders(message.payload?.headers || []);
+    const senderEmail = extractEmail(headers.from || '');
     let parsed = parseSubject(headers.subject || '');
     if (!parsed) parsed = parseSubject(subject || '');
     if (!parsed) continue;
@@ -80,6 +81,14 @@ for (const t of threads) {
       comments: 0,
     });
 
+    appendAuthorshipLog({
+      editorial,
+      senderEmail,
+      author,
+      title,
+      threadId: t.id,
+    });
+
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
     markThreadProcessed(t.id);
     processed += 1;
@@ -111,6 +120,13 @@ function mapHeaders(headers) {
   const h = {};
   for (const x of headers) h[(x.name || '').toLowerCase()] = x.value || '';
   return { subject: h.subject || '', from: h.from || '' };
+}
+
+function extractEmail(from='') {
+  const m = String(from).match(/<([^>]+@[^>]+)>/);
+  if (m) return m[1].trim().toLowerCase();
+  const m2 = String(from).match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);
+  return m2 ? m2[0].toLowerCase() : '';
 }
 function parseSubject(s) {
   const v = String(s || '').trim().replace(/^(re|rv|fwd|fw)\s*:\s*/i, '');
@@ -394,6 +410,47 @@ function upsertPost(post) {
 function syncPostsJs() {
   const posts = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'posts.json'), 'utf8'));
   fs.writeFileSync(path.join(ROOT, 'data', 'posts.js'), `window.POSTS = ${JSON.stringify(posts, null, 2)};\n`);
+}
+
+function appendAuthorshipLog({ editorial = '', senderEmail = '', author = '', title = '', threadId = '' }) {
+  const p = path.join(ROOT, 'data', 'control_autoria.csv');
+  if (!fs.existsSync(p)) {
+    fs.writeFileSync(p, 'fecha,hora,editor,email_remitente,autor_detectado,titulo,thread_id\n');
+  }
+
+  const { date, time } = madridDateTime();
+  const row = [
+    csv(date),
+    csv(time),
+    csv(editorial),
+    csv(senderEmail),
+    csv(author),
+    csv(title),
+    csv(threadId),
+  ].join(',') + '\n';
+
+  fs.appendFileSync(p, row);
+}
+
+function madridDateTime() {
+  const d = new Date();
+  const fmt = new Intl.DateTimeFormat('es-ES', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false,
+  }).formatToParts(d);
+
+  const get = (t) => fmt.find((x) => x.type === t)?.value || '00';
+  return {
+    date: `${get('year')}-${get('month')}-${get('day')}`,
+    time: `${get('hour')}:${get('minute')}:${get('second')}`,
+  };
+}
+
+function csv(v = '') {
+  const s = String(v ?? '').replaceAll('"', '""');
+  return `"${s}"`;
 }
 function loadDrafts() {
   const p = path.join(ROOT, 'data', 'drafts.json');

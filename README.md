@@ -54,6 +54,18 @@ Ejecución manual desde `blog/`:
 node tools/publish-from-gmail.mjs
 ```
 
+## Control de autoría (Excel)
+Se genera automáticamente `data/control_autoria.csv` con columnas:
+- fecha
+- hora
+- editor (GEPAC/AEAL)
+- email_remitente (del correo)
+- autor_detectado
+- titulo
+- thread_id
+
+Puedes abrir ese `.csv` directamente con Excel.
+
 ## Backup automático
 Script de backup: `tools/backup-blog.sh`
 
