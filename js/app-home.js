@@ -37,13 +37,9 @@ async function init() {
       return;
     }
 
-    const [featured, ...rest] = latestMonthPosts;
-    if (featured && isWithinLastNDays(featured.date, 30)) {
-      renderFeatured(featured);
-    } else {
-      featuredHome.innerHTML = '';
-    }
-    renderList(rest, listHome);
+    // Destacada desactivada por decisión editorial (evitar arrastres/caché de portada)
+    featuredHome.innerHTML = '';
+    renderList(latestMonthPosts, listHome);
     renderMostRead(latestMonthPosts.slice(0, 5));
   } catch {
     listHome.innerHTML = `<p class="empty">No se pudieron cargar noticias.</p>`;
