@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 
 const ROOT = path.resolve(process.cwd());
 const dataDir = path.join(ROOT, 'data');
@@ -60,8 +61,30 @@ const csv = [
 ].join('\n') + '\n';
 fs.writeFileSync(csvPath, csv);
 
+// JSON intermedio para generar PDF de auditoría
+const jsonPath = path.join(reportsDir, `informe-${yy}-${mm}.json`);
+const summary = {
+  period: `${yy}-${mm}`,
+  total,
+  byEditor,
+  byEmail,
+  byType,
+  byEntity,
+};
+fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
+
+let pdfPath = '';
+try {
+  const py = path.join(ROOT, '.venv', 'bin', 'python');
+  const pdfOut = exec(`"${py}" tools/reporte-mensual-pdf.py "${jsonPath}"`).trim();
+  pdfPath = pdfOut;
+} catch (e) {
+  // fallback: sin PDF, mantener md/csv
+}
+
 console.log(`Informe mensual generado: ${outPath}`);
 console.log(`CSV resumen: ${csvPath}`);
+if (pdfPath) console.log(`PDF auditoría: ${pdfPath}`);
 console.log(`Publicaciones: ${total} | GEPAC ${byEditor.GEPAC || 0} | AEAL ${byEditor.AEAL || 0}`);
 console.log(`Menciones: total ${mencRows.length} | farma ${byType.farmaceutica || 0} | asociacion ${byType.asociacion || 0} | entidad ${byType.entidad || 0}`);
 
@@ -118,4 +141,8 @@ function countBy(rows, key) {
 
 function topEntries(obj, limit = 10) {
   return Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, limit);
+}
+
+function exec(cmd) {
+  return execSync(cmd, { encoding: 'utf8' });
 }

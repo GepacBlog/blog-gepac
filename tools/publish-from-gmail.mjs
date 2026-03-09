@@ -89,6 +89,13 @@ for (const t of threads) {
       threadId: t.id,
     });
 
+    appendMentionsLog({
+      editorial,
+      title,
+      threadId: t.id,
+      text: `${title}\n${summary}\n${content}`,
+    });
+
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
     markThreadProcessed(t.id);
     processed += 1;
@@ -430,6 +437,64 @@ function appendAuthorshipLog({ editorial = '', senderEmail = '', author = '', ti
   ].join(',') + '\n';
 
   fs.appendFileSync(p, row);
+}
+
+function appendMentionsLog({ editorial = '', title = '', threadId = '', text = '' }) {
+  const p = path.join(ROOT, 'data', 'control_menciones.csv');
+  if (!fs.existsSync(p)) {
+    fs.writeFileSync(p, 'fecha,hora,editor,titulo,thread_id,tipo,entidad\n');
+  }
+
+  const mentions = detectMentions(text);
+  if (!mentions.length) return;
+
+  const { date, time } = madridDateTime();
+  const rows = mentions
+    .map((m) => [csv(date), csv(time), csv(editorial), csv(title), csv(threadId), csv(m.type), csv(m.name)].join(','))
+    .join('\n') + '\n';
+  fs.appendFileSync(p, rows);
+}
+
+function detectMentions(text = '') {
+  const t = normalizeText(text);
+  const catalog = [
+    { type: 'farmaceutica', name: 'Sanofi' },
+    { type: 'farmaceutica', name: 'Menarini' },
+    { type: 'farmaceutica', name: 'Roche' },
+    { type: 'farmaceutica', name: 'Novartis' },
+    { type: 'farmaceutica', name: 'Pfizer' },
+    { type: 'farmaceutica', name: 'AstraZeneca' },
+    { type: 'farmaceutica', name: 'BMS' },
+    { type: 'farmaceutica', name: 'MSD' },
+    { type: 'farmaceutica', name: 'GSK' },
+    { type: 'farmaceutica', name: 'Janssen' },
+    { type: 'asociacion', name: 'GEPAC' },
+    { type: 'asociacion', name: 'AEAL' },
+    { type: 'asociacion', name: 'Fundación Sandra Ibarra' },
+    { type: 'asociacion', name: 'CRIS' },
+    { type: 'entidad', name: 'UAM' },
+    { type: 'entidad', name: 'URJC' },
+    { type: 'entidad', name: 'UCM' },
+  ];
+
+  const out = [];
+  for (const c of catalog) {
+    const key = normalizeText(c.name);
+    const re = new RegExp(`\\b${escapeRegExp(key)}\\b`);
+    if (re.test(t)) out.push(c);
+  }
+  return out;
+}
+
+function normalizeText(s = '') {
+  return String(s)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function escapeRegExp(s = '') {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function madridDateTime() {

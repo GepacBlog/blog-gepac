@@ -76,6 +76,7 @@ Se genera `data/control_menciones.csv` con detecciones por artículo:
 Script: `tools/reporte-mensual.mjs`
 
 Genera en `reports/`:
+- `informe-YYYY-MM.pdf` (informe maquetado para auditoría)
 - `informe-YYYY-MM.md`
 - `informe-YYYY-MM.csv`
 
