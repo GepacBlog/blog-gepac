@@ -37,11 +37,14 @@ async function init() {
 
     if (!latestMonthPosts.length) {
       listHome.innerHTML = `<p class="empty">Sin noticias del último mes.</p>`;
+      featuredHome.innerHTML = "";
       mostRead.innerHTML = "";
       return;
     }
 
-    renderList(latestMonthPosts, listHome);
+    const [featured, ...rest] = latestMonthPosts;
+    renderFeatured(featured);
+    renderList(rest, listHome);
     renderMostRead(latestMonthPosts.slice(0, 5));
   } catch {
     listHome.innerHTML = `<p class="empty">No se pudieron cargar noticias.</p>`;
