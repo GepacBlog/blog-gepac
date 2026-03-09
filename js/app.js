@@ -38,7 +38,11 @@ async function init() {
     }
 
     const [featured, ...rest] = latestMonthPosts;
-    renderFeatured(featured);
+    if (featured && isWithinLastNDays(featured.date, 30)) {
+      renderFeatured(featured);
+    } else {
+      featuredHome.innerHTML = '';
+    }
     renderList(rest, listHome);
     renderMostRead(latestMonthPosts.slice(0, 5));
   } catch {
