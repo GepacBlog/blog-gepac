@@ -305,22 +305,13 @@ section h2 {
   font-weight: 700;
   cursor: pointer;
 }
-.year-scroll {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 12px;
-  scrollbar-width: thin;
-}
 .year-btn {
-  flex: 0 0 auto;
   background: #fff;
   border: 1px solid #cfd6e4;
   border-radius: 999px;
-  min-height: 40px;
-  padding: 7px 12px;
-  font-size: .92rem;
+  min-height: 34px;
+  padding: 5px 10px;
+  font-size: .82rem;
   font-weight: 800;
 }
 .year-btn.active {
