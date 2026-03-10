@@ -184,7 +184,9 @@ function parseBody(text) {
   out.author = pick(compact, /Autor\s*:\s*(.+?)(?=\s+(Fecha\s*:|Resumen\s*:|Cuerpo\s*:|T[íi]tulo\s*:)|$)/i);
   out.summary = pick(compact, /Resumen\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Cuerpo\s*:|T[íi]tulo\s*:)|$)/i);
   out.title = pick(compact, /T[íi]tulo\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:)|$)/i);
-  out.body = pick(compact, /Cuerpo\s*:\s*(.+)$/i);
+  // Preferimos extraer cuerpo preservando saltos de línea
+  const bodyRawMatch = src.match(/Cuerpo\s*:\s*([\s\S]+)$/i);
+  out.body = bodyRawMatch ? bodyRawMatch[1].trim() : pick(compact, /Cuerpo\s*:\s*(.+)$/i);
 
   // Fallback por líneas (si viene bien formateado)
   if (!out.body || !out.summary || !out.author || !out.date) {
@@ -261,6 +263,63 @@ function sanitizeBody(src='') {
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+function renderBodyHtml(content = '') {
+  let blocks = String(content)
+    .split(/\n\n+/)
+    .map((b) => b.trim())
+    .filter(Boolean);
+
+  if (blocks.length <= 1) {
+    blocks = autoParagraphize(blocks[0] || String(content || ''));
+  }
+
+  return blocks
+    .map((b) => {
+      if (isSubtitleBlock(b)) {
+        return `<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(stripEndingColon(b)))}</h2>`;
+      }
+      return `<p>${autoLinkUrls(escapeHTML(b))}</p>`;
+    })
+    .join('\n');
+}
+
+function autoParagraphize(text = '') {
+  const clean = String(text).replace(/\s+/g, ' ').trim();
+  if (!clean) return [];
+  const sentences = clean.split(/(?<=[.!?])\s+/).filter(Boolean);
+  if (sentences.length <= 2) return [clean];
+
+  const out = [];
+  let buf = '';
+  let count = 0;
+  for (const s of sentences) {
+    const candidate = (buf ? `${buf} ${s}` : s).trim();
+    if (candidate.length > 420 || count >= 2) {
+      if (buf) out.push(buf.trim());
+      buf = s;
+      count = 1;
+    } else {
+      buf = candidate;
+      count += 1;
+    }
+  }
+  if (buf) out.push(buf.trim());
+  return out;
+}
+
+function isSubtitleBlock(text = '') {
+  const t = String(text).trim();
+  if (!t) return false;
+  if (t.length > 95) return false;
+  if (/^[A-ZÁÉÍÓÚÑ0-9][^.!?]{2,}:$/.test(t)) return true;
+  const words = t.split(/\s+/).length;
+  return words >= 2 && words <= 10 && !/[.!?]$/.test(t) && /^[A-ZÁÉÍÓÚÑ]/.test(t);
+}
+
+function stripEndingColon(text = '') {
+  return String(text).replace(/:\s*$/, '').trim();
 }
 
 function reviewQuality({ summary = '', content = '', bodyText = '', title = '' }) {
@@ -387,7 +446,7 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
 <div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(editorial)} · ${escapeHTML(dateISO)} · ${escapeHTML(author)}</div>
 ${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>` : ''}
 <p>${escapeHTML(summary)}</p>
-${content.split(/\n\n+/).map((p) => `<p>${autoLinkUrls(escapeHTML(p))}</p>`).join('\n')}
+${renderBodyHtml(content)}
 ${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
 </div>
 </body></html>`;
