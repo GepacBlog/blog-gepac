@@ -142,8 +142,12 @@ function parseSubject(s) {
   // [GEPAC] Título
   // GEPAC: Título
   // GEPAC - Título
-  // gepac título
-  let m = v.match(/^\s*\[(gepac|aeal)\]\s*(.+)$/i);
+  // GEPAC título
+  // Editorial GEPAC título
+  let m = v.match(/^\s*editorial\s+(gepac|aeal)\s+(.+)$/i);
+  if (m) return { editorial: m[1], title: m[2].trim() };
+
+  m = v.match(/^\s*\[(gepac|aeal)\]\s*(.+)$/i);
   if (m) return { editorial: m[1], title: m[2].trim() };
 
   m = v.match(/^\s*(gepac|aeal)\s*[:\-]\s*(.+)$/i);
