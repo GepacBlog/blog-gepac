@@ -2,9 +2,14 @@ const listHistory = document.getElementById("list-history");
 const btnAll = document.getElementById("filter-all");
 const btnGepac = document.getElementById("filter-gepac");
 const btnAeal = document.getElementById("filter-aeal");
+const btnLatest50 = document.getElementById("filter-latest-50");
+const yearButtons = document.getElementById("year-buttons");
+const monthButtons = document.getElementById("month-buttons");
 
-let cachedHistoryPosts = [];
-let currentFilter = "ALL";
+let allPosts = [];
+let currentEditorial = "ALL";
+let currentYear = null;
+let currentMonth = null;
 
 init();
 
@@ -16,75 +21,135 @@ async function init() {
       posts = await r.json();
     }
 
-    const now = new Date();
-    const yearStart = new Date(now.getFullYear(), 0, 1);
-
-    cachedHistoryPosts = posts
+    allPosts = posts
       .map((p) => ({ ...p, dateObj: new Date(p.date) }))
-      .filter((p) => p.dateObj >= yearStart && !isWithinLastNDays(p.date, 30))
       .sort((a, b) => b.dateObj - a.dateObj);
 
     bindFilters();
-    applyFilter("ALL");
+    renderYearButtons();
+    applyView({ latest50: true });
   } catch {
     listHistory.innerHTML = `<p class="empty">No se pudieron cargar noticias.</p>`;
   }
 }
 
 function bindFilters() {
-  btnAll?.addEventListener("click", () => applyFilter("ALL"));
-  btnGepac?.addEventListener("click", () => applyFilter("GEPAC"));
-  btnAeal?.addEventListener("click", () => applyFilter("AEAL"));
+  btnAll?.addEventListener("click", () => {
+    currentEditorial = "ALL";
+    applyView({ latest50: currentYear === null });
+  });
+
+  btnGepac?.addEventListener("click", () => {
+    currentEditorial = "GEPAC";
+    applyView({ latest50: currentYear === null });
+  });
+
+  btnAeal?.addEventListener("click", () => {
+    currentEditorial = "AEAL";
+    applyView({ latest50: currentYear === null });
+  });
+
+  btnLatest50?.addEventListener("click", () => {
+    currentYear = null;
+    currentMonth = null;
+    renderMonthButtons();
+    applyView({ latest50: true });
+  });
 }
 
-function applyFilter(filter) {
-  currentFilter = filter;
+function applyView({ latest50 = false } = {}) {
+  let posts = applyEditorialFilter(allPosts);
 
-  const posts =
-    filter === "ALL"
-      ? cachedHistoryPosts
-      : cachedHistoryPosts.filter((p) => p.editorial === filter);
+  if (latest50) {
+    posts = posts.slice(0, 50);
+  } else if (currentYear !== null) {
+    posts = posts.filter((p) => p.dateObj.getFullYear() === currentYear);
+    if (currentMonth !== null) {
+      posts = posts.filter((p) => p.dateObj.getMonth() + 1 === currentMonth);
+    }
+  }
 
-  renderGroupedByMonth(posts, listHistory);
-  setActiveButton();
+  renderList(posts, listHistory);
+  setActiveButtons();
 }
 
-function setActiveButton() {
-  [btnAll, btnGepac, btnAeal].forEach((b) => b?.classList.remove("active"));
-  if (currentFilter === "ALL") btnAll?.classList.add("active");
-  if (currentFilter === "GEPAC") btnGepac?.classList.add("active");
-  if (currentFilter === "AEAL") btnAeal?.classList.add("active");
+function applyEditorialFilter(posts) {
+  if (currentEditorial === "ALL") return posts;
+  return posts.filter((p) => p.editorial === currentEditorial);
 }
 
-function renderGroupedByMonth(posts, mountNode) {
+function renderYearButtons() {
+  if (!yearButtons) return;
+  const years = Array.from(new Set(allPosts.map((p) => p.dateObj.getFullYear()))).sort((a, b) => b - a);
+
+  yearButtons.innerHTML = years
+    .map(
+      (year) => `<button class="filter-btn year-btn" data-year="${year}">${year}</button>`
+    )
+    .join("");
+
+  yearButtons.querySelectorAll(".year-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentYear = Number(btn.dataset.year);
+      currentMonth = null;
+      renderMonthButtons();
+      applyView({ latest50: false });
+    });
+  });
+}
+
+function renderMonthButtons() {
+  if (!monthButtons) return;
+
+  if (currentYear === null) {
+    monthButtons.innerHTML = "";
+    return;
+  }
+
+  let posts = allPosts.filter((p) => p.dateObj.getFullYear() === currentYear);
+  posts = applyEditorialFilter(posts);
+
+  const months = Array.from(new Set(posts.map((p) => p.dateObj.getMonth() + 1))).sort((a, b) => b - a);
+
+  monthButtons.innerHTML = months
+    .map(
+      (m) => `<button class="filter-btn month-btn" data-month="${m}">${monthNameEs(m)}</button>`
+    )
+    .join("");
+
+  monthButtons.querySelectorAll(".month-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      currentMonth = Number(btn.dataset.month);
+      applyView({ latest50: false });
+    });
+  });
+}
+
+function setActiveButtons() {
+  [btnAll, btnGepac, btnAeal, btnLatest50].forEach((b) => b?.classList.remove("active"));
+  if (currentEditorial === "ALL") btnAll?.classList.add("active");
+  if (currentEditorial === "GEPAC") btnGepac?.classList.add("active");
+  if (currentEditorial === "AEAL") btnAeal?.classList.add("active");
+  if (currentYear === null) btnLatest50?.classList.add("active");
+
+  yearButtons?.querySelectorAll(".year-btn").forEach((b) => b.classList.remove("active"));
+  if (currentYear !== null) {
+    yearButtons?.querySelector(`[data-year="${currentYear}"]`)?.classList.add("active");
+  }
+
+  monthButtons?.querySelectorAll(".month-btn").forEach((b) => b.classList.remove("active"));
+  if (currentMonth !== null) {
+    monthButtons?.querySelector(`[data-month="${currentMonth}"]`)?.classList.add("active");
+  }
+}
+
+function renderList(posts, mountNode) {
   if (!posts.length) {
     mountNode.innerHTML = `<p class="empty">No hay noticias para este filtro.</p>`;
     return;
   }
 
-  const groups = new Map();
-  for (const p of posts) {
-    const key = `${p.dateObj.getFullYear()}-${String(p.dateObj.getMonth() + 1).padStart(2, "0")}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(p);
-  }
-
-  const html = Array.from(groups.entries())
-    .map(([key, monthPosts]) => {
-      const [year, month] = key.split("-");
-      const monthName = monthNameEs(Number(month));
-      return `
-        <section class="month-block">
-          <h3 class="month-title">${monthName} ${year}</h3>
-          <div class="news-list">
-            ${monthPosts.map(renderCard).join("")}
-          </div>
-        </section>
-      `;
-    })
-    .join("");
-
-  mountNode.innerHTML = html;
+  mountNode.innerHTML = posts.map(renderCard).join("");
 }
 
 function renderCard(p) {
@@ -121,18 +186,6 @@ function ageLabel(dateObj) {
   if (diffDays === 0) return "Noticia de hoy";
   if (diffDays === 1) return "Noticia de hace 1 día";
   return `Noticia de hace ${diffDays} días`;
-}
-
-function isWithinLastNDays(dateISO, days = 30) {
-  const [y, m, d] = String(dateISO).split('-').map(Number);
-  const article = new Date(y, (m || 1) - 1, d || 1);
-  article.setHours(0, 0, 0, 0);
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const diffDays = Math.floor((today - article) / 86400000);
-  return diffDays >= 0 && diffDays <= days;
 }
 
 function escapeHTML(str = "") {

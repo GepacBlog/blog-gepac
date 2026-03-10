@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blog de GEPAC · Noticias antiguas</title>
-    <link rel="stylesheet" href="./css/styles.css?v=20260310-2" />
+    <link rel="stylesheet" href="./css/styles.css?v=20260310-3" />
   </head>
   <body>
     <header class="site-header">
@@ -15,7 +15,7 @@
       </div>
       <div class="brand-tag">PACIENTES / CÁNCER</div>
       <h1>Blog de GEPAC</h1>
-      <p>Noticias anteriores a los últimos 30 días (año en curso)</p>
+      <p>Histórico visual: últimas 50 y navegación por año/mes</p>
       <div class="brand-strip" aria-hidden="true"></div>
       <nav class="top-nav top-sections">
         <a class="nav-link nav-history" href="./index.html?v=20260310-2">Volver a portada</a>
@@ -28,15 +28,24 @@
       <section>
         <h2>Histórico anual</h2>
         <div class="filter-row">
-          <button id="filter-all" class="filter-btn active">Todas</button>
+          <button id="filter-latest-50" class="filter-btn active">Últimas 50</button>
+          <button id="filter-all" class="filter-btn">Todas</button>
           <button id="filter-gepac" class="filter-btn gepac-btn">Editorial GEPAC</button>
           <button id="filter-aeal" class="filter-btn aeal-btn">Editorial AEAL</button>
+        </div>
+        <div class="filter-group">
+          <div class="filter-title">Años</div>
+          <div id="year-buttons" class="filter-row"></div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-title">Meses del año seleccionado</div>
+          <div id="month-buttons" class="filter-row"></div>
         </div>
         <div id="list-history" class="news-list"></div>
       </section>
     </main>
 
-    <script src="./data/posts.js?v=20260310-1"></script>
-    <script src="./js/historico.js?v=20260310-1"></script>
+    <script src="./data/posts.js?v=20260310-3"></script>
+    <script src="./js/historico.js?v=20260310-3"></script>
   </body>
 </html>
