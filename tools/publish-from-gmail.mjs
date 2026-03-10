@@ -261,20 +261,26 @@ function sanitizeBody(src='') {
   }
   raw = raw.slice(0, cut);
 
-  return raw
+  const lines = raw
     .replace(/<(https?:\/\/[^>\s]+)>/g, ' $1 ')
     .replace(/([A-Za-zÁ-ÿ0-9])(?=https?:\/\/)/g, '$1 ')
     .replace(/_{3,}/g, '\n\n')
     .replace(/\n{3,}/g, '\n\n')
     .split(/\r?\n/)
     .map((ln) => ln.replace(/^>+\s*/, '').trim())
-    .filter(Boolean)
-    .filter((ln) => !/^\s*(De:|Enviado:|Para:|Asunto:)\b/i.test(ln))
-    .filter((ln) => !/^\s*Serie\s+(GEPAC|AEAL)\b/i.test(ln))
-    .filter((ln) => !/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial|Contenido elaborado por)\b/i.test(ln))
-    .filter((ln) => !/^\s*[•\-*]\s+/.test(ln))
-    .filter((ln) => !/^https?:\/\//i.test(ln))
-    .filter((ln) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ln))
+    .map((ln) => {
+      if (!ln) return '';
+      if (/^\s*(De:|Enviado:|Para:|Asunto:)\b/i.test(ln)) return null;
+      if (/^\s*Serie\s+(GEPAC|AEAL)\b/i.test(ln)) return null;
+      if (/^\s*(Keywords?|Title\s*SEO|Meta\s*description|Firma editorial|Contenido elaborado por)\b/i.test(ln)) return null;
+      if (/^\s*[•\-*]\s+/.test(ln)) return null;
+      if (/^https?:\/\//i.test(ln)) return null;
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(ln)) return null;
+      return ln;
+    })
+    .filter((ln) => ln !== null);
+
+  return lines
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -290,14 +296,21 @@ function renderBodyHtml(content = '') {
     blocks = autoParagraphize(blocks[0] || String(content || ''));
   }
 
-  return blocks
-    .map((b) => {
-      if (isSubtitleBlock(b)) {
-        return `<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(stripEndingColon(b)))}</h2>`;
-      }
-      return `<p>${autoLinkUrls(escapeHTML(b))}</p>`;
-    })
-    .join('\n');
+  const out = [];
+  for (const b of blocks) {
+    const injected = inferSubtitleBeforeParagraph(b);
+    if (injected) {
+      out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(injected))}</h2>`);
+    }
+
+    if (isSubtitleBlock(b)) {
+      out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(stripEndingColon(b)))}</h2>`);
+    } else {
+      out.push(`<p>${autoLinkUrls(escapeHTML(b))}</p>`);
+    }
+  }
+
+  return out.join('\n');
 }
 
 function autoParagraphize(text = '') {
@@ -335,6 +348,22 @@ function isSubtitleBlock(text = '') {
 
 function stripEndingColon(text = '') {
   return String(text).replace(/:\s*$/, '').trim();
+}
+
+function inferSubtitleBeforeParagraph(paragraph = '') {
+  const p = String(paragraph || '');
+  const rules = [
+    [/^Uno de los ámbitos en los que esta utilidad resulta más evidente/i, 'Gestión de la información y atención al paciente'],
+    [/^La tecnología también ha cambiado la forma en que las asociaciones/i, 'Información fiable y acceso digital'],
+    [/^Junto a ello, la digitalización ha ampliado enormemente/i, 'Acompañamiento a distancia'],
+    [/^También las comunidades de pacientes se han visto fortalecidas/i, 'Comunidad y apoyo emocional'],
+    [/^Ahora bien, la incorporación de la tecnología/i, 'Privacidad y responsabilidad'],
+    [/^Por eso conviene abandonar una idea simplificada/i, 'Tecnología al servicio de la misión'],
+  ];
+  for (const [re, heading] of rules) {
+    if (re.test(p)) return heading;
+  }
+  return '';
 }
 
 function reviewQuality({ summary = '', content = '', bodyText = '', title = '' }) {
