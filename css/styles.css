@@ -305,18 +305,22 @@ section h2 {
   font-weight: 700;
   cursor: pointer;
 }
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
+.year-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 6px;
   margin-bottom: 12px;
+  scrollbar-width: thin;
 }
 .year-btn {
-  background: linear-gradient(180deg, #ffffff 0%, #f4f7ff 100%);
+  flex: 0 0 auto;
+  background: #fff;
   border: 1px solid #cfd6e4;
-  border-radius: 12px;
-  min-height: 54px;
-  font-size: 1rem;
+  border-radius: 999px;
+  min-height: 40px;
+  padding: 7px 12px;
+  font-size: .92rem;
   font-weight: 800;
 }
 .year-btn.active {
