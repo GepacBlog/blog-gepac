@@ -292,22 +292,37 @@ function renderBodyHtml(content = '') {
     .map((b) => b.trim())
     .filter(Boolean);
 
+  // Solo reagrupa si llega en un bloque único sin saltos.
   if (blocks.length <= 1) {
     blocks = autoParagraphize(blocks[0] || String(content || ''));
   }
 
   const out = [];
+  const longArticle = blocks.length >= 8;
+  let paraSinceSubtitle = 0;
+
   for (const b of blocks) {
-    const injected = inferSubtitleBeforeParagraph(b);
-    if (injected) {
-      out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(injected))}</h2>`);
-    }
+    const inferred = inferSubtitleBeforeParagraph(b);
 
     if (isSubtitleBlock(b)) {
       out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(stripEndingColon(b)))}</h2>`);
-    } else {
-      out.push(`<p>${autoLinkUrls(escapeHTML(b))}</p>`);
+      paraSinceSubtitle = 0;
+      continue;
     }
+
+    if (inferred) {
+      out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(inferred))}</h2>`);
+      paraSinceSubtitle = 0;
+    } else if (longArticle && paraSinceSubtitle >= 3) {
+      const periodic = deriveSubtitleFromParagraph(b);
+      if (periodic) {
+        out.push(`<h2 style="margin:20px 0 8px;font-size:1.15rem;line-height:1.35">${autoLinkUrls(escapeHTML(periodic))}</h2>`);
+        paraSinceSubtitle = 0;
+      }
+    }
+
+    out.push(`<p>${autoLinkUrls(escapeHTML(b))}</p>`);
+    paraSinceSubtitle += 1;
   }
 
   return out.join('\n');
@@ -364,6 +379,14 @@ function inferSubtitleBeforeParagraph(paragraph = '') {
     if (re.test(p)) return heading;
   }
   return '';
+}
+
+function deriveSubtitleFromParagraph(paragraph = '') {
+  const p = String(paragraph || '').replace(/\s+/g, ' ').trim();
+  if (!p) return '';
+  const head = p.split(/[.:;]/)[0].trim();
+  if (head.length < 24) return '';
+  return head.length > 72 ? `${head.slice(0, 69)}…` : head;
 }
 
 function reviewQuality({ summary = '', content = '', bodyText = '', title = '' }) {
