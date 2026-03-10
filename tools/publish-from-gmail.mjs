@@ -246,7 +246,22 @@ function bodyWithoutHeaders(src='') {
     .trim();
 }
 function sanitizeBody(src='') {
-  return String(src)
+  let raw = String(src || '');
+
+  // Corta bloques de instrucciones internas/SEO/redes que no deben publicarse
+  const stopMarkers = [
+    'Documento de optimización SEO editorial',
+    'Informe operativo para despliegue en redes sociales',
+    'Material de publicación listo para usar',
+  ];
+  let cut = raw.length;
+  for (const marker of stopMarkers) {
+    const i = raw.indexOf(marker);
+    if (i >= 0 && i < cut) cut = i;
+  }
+  raw = raw.slice(0, cut);
+
+  return raw
     .replace(/<(https?:\/\/[^>\s]+)>/g, ' $1 ')
     .replace(/([A-Za-zÁ-ÿ0-9])(?=https?:\/\/)/g, '$1 ')
     .replace(/_{3,}/g, '\n\n')
