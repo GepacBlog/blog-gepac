@@ -4,7 +4,7 @@ window.POSTS = [
     "editorial": "GEPAC",
     "date": "2026-03-10",
     "title": "La tecnología también acompaña a los pacientes",
-    "summary": "La tecnología también acompaña a los pacientes El papel silencioso de la informática en las asociaciones de pacientes Cuando una persona recibe un diagnóstico de cáncer, una de las primeras reacciones suele ser buscar información.",
+    "summary": "La tecnología se ha convertido en una herramienta esencial para que las asociaciones de pacientes organicen recursos, difundan información fiable y refuercen el acompañamiento.",
     "image": "./assets/uploads/2026-03-10_gepac_la-tecnologia-tambien-acompana-a-los-pacientes_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/004_2026-03-10_la-tecnologia-tambien-acompana-a-los-pacientes.html",
     "author": "Equipo GEPAC",
