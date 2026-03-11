@@ -52,10 +52,11 @@ lines.push(`- Publicaciones registradas: **${total}**`);
 lines.push(`- GEPAC: **${byEditor.GEPAC || 0}** · AEAL: **${byEditor.AEAL || 0}**`);
 lines.push('');
 lines.push('## KPI editoriales (internos)');
-lines.push(`- Días con publicación: **${kpi.daysWithPosts}**`);
-lines.push(`- Artículos por día activo: **${kpi.postsPerActiveDay}**`);
-lines.push(`- Longitud media del resumen: **${kpi.avgSummaryLength}** caracteres`);
-lines.push(`- Menciones por artículo: **${kpi.mentionsPerPost}**`);
+lines.push(`- Publicaciones del mes: **${kpi.totalPosts}**`);
+lines.push(`- Días activos de publicación: **${kpi.daysWithPosts}**`);
+lines.push(`- Cadencia media (artículos/semana): **${kpi.postsPerWeek}**`);
+lines.push(`- Menciones totales: **${kpi.totalMentions}**`);
+lines.push(`- Entidades únicas mencionadas: **${kpi.uniqueEntities}**`);
 if (kpi.topMentionedTitle) lines.push(`- Artículo con más menciones: **${kpi.topMentionedTitle}** (${kpi.topMentionedCount})`);
 lines.push('');
 lines.push('## Autoría (por email remitente)');
@@ -215,12 +216,11 @@ function buildMentionByArticle(rows) {
 }
 
 function buildKpi(monthPosts, mencRows) {
+  const totalPosts = monthPosts.length;
+  const totalMentions = mencRows.length;
   const days = new Set(monthPosts.map((p) => p.date)).size;
-  const postsPerActiveDay = days ? (monthPosts.length / days).toFixed(2) : '0.00';
-  const avgSummaryLength = monthPosts.length
-    ? Math.round(monthPosts.reduce((acc, p) => acc + String(p.summary || '').length, 0) / monthPosts.length)
-    : 0;
-  const mentionsPerPost = monthPosts.length ? (mencRows.length / monthPosts.length).toFixed(2) : '0.00';
+  const postsPerWeek = ((totalPosts / 30) * 7).toFixed(2);
+  const uniqueEntities = new Set(mencRows.map((r) => (r.entidad || '').trim()).filter(Boolean)).size;
 
   const byTitle = {};
   for (const r of mencRows) {
@@ -231,10 +231,11 @@ function buildKpi(monthPosts, mencRows) {
   const top = Object.entries(byTitle).sort((a, b) => b[1] - a[1])[0];
 
   return {
+    totalPosts,
+    totalMentions,
     daysWithPosts: days,
-    postsPerActiveDay,
-    avgSummaryLength,
-    mentionsPerPost,
+    postsPerWeek,
+    uniqueEntities,
     topMentionedTitle: top ? top[0] : '',
     topMentionedCount: top ? top[1] : 0,
   };

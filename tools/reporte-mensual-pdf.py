@@ -77,10 +77,11 @@ def main():
     story.append(Spacer(1, 16))
     story.append(Paragraph("KPI editoriales (internos)", styles["H2"]))
     kpi_rows = [["KPI", "Valor"],
-        ["Días con publicación", str(kpi.get("daysWithPosts", 0))],
-        ["Artículos por día activo", str(kpi.get("postsPerActiveDay", "0.00"))],
-        ["Longitud media del resumen (car.)", str(kpi.get("avgSummaryLength", 0))],
-        ["Menciones por artículo", str(kpi.get("mentionsPerPost", "0.00"))],
+        ["Publicaciones del mes", str(kpi.get("totalPosts", 0))],
+        ["Días activos de publicación", str(kpi.get("daysWithPosts", 0))],
+        ["Cadencia media (artículos/semana)", str(kpi.get("postsPerWeek", "0.00"))],
+        ["Menciones totales", str(kpi.get("totalMentions", 0))],
+        ["Entidades únicas mencionadas", str(kpi.get("uniqueEntities", 0))],
     ]
     if kpi.get("topMentionedTitle"):
         kpi_rows.append(["Artículo con más menciones", Paragraph(f"{kpi.get('topMentionedTitle')} ({kpi.get('topMentionedCount',0)})", styles["Normal"])])

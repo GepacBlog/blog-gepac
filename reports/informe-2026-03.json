@@ -125,10 +125,11 @@
     }
   ],
   "kpi": {
+    "totalPosts": 5,
+    "totalMentions": 10,
     "daysWithPosts": 5,
-    "postsPerActiveDay": "1.00",
-    "avgSummaryLength": 156,
-    "mentionsPerPost": "2.00",
+    "postsPerWeek": "1.17",
+    "uniqueEntities": 6,
     "topMentionedTitle": "La oncología de precisión, clave para mejorar resultados y reducir inequidades",
     "topMentionedCount": 3
   },

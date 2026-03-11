@@ -4,10 +4,11 @@
 - GEPAC: **5** · AEAL: **0**
 
 ## KPI editoriales (internos)
-- Días con publicación: **5**
-- Artículos por día activo: **1.00**
-- Longitud media del resumen: **156** caracteres
-- Menciones por artículo: **2.00**
+- Publicaciones del mes: **5**
+- Días activos de publicación: **5**
+- Cadencia media (artículos/semana): **1.17**
+- Menciones totales: **10**
+- Entidades únicas mencionadas: **6**
 - Artículo con más menciones: **La oncología de precisión, clave para mejorar resultados y reducir inequidades** (3)
 
 ## Autoría (por email remitente)
