@@ -1,0 +1,42 @@
+PLANTILLA OFICIAL PARA EDITORES · ENVÍO DE ARTÍCULOS
+
+1) ASUNTO (obligatorio)
+- Editorial GEPAC [Título del artículo]
+- Editorial AEAL [Título del artículo]
+
+2) CUERPO DEL CORREO (estructura obligatoria)
+Título: [Título completo del artículo]
+Fecha: [YYYY-MM-DD]
+Autor: [Nombre o equipo]
+Resumen: [Entradilla breve para portada]
+Cuerpo:
+[Párrafo 1]
+
+[Subtítulo opcional]
+[Párrafo 2]
+
+[Párrafo 3]
+
+3) CAMPOS SEO (opcionales, recomendados)
+Title SEO: [Título SEO]
+Meta description: [Descripción SEO]
+Keywords: [palabra1, palabra2, palabra3]
+URL sugerida: [/slug-recomendado]
+
+4) IMÁGENES
+- 01 = imagen principal (obligatoria)
+- 02 = imagen final (opcional)
+Formatos: JPG o PNG
+
+5) REGLAS DE ENVÍO
+- Separar párrafos con línea en blanco.
+- No incluir notas internas de trabajo en el correo final.
+- Revisar ortografía antes de enviar.
+
+6) CHECKLIST
+[ ] Asunto correcto (Editorial GEPAC/AEAL + título)
+[ ] Fecha en formato YYYY-MM-DD
+[ ] Resumen escrito
+[ ] Cuerpo completo incluido
+[ ] Imágenes 01/02 adjuntas
+[ ] SEO incluido (si disponible)

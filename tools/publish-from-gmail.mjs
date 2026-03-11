@@ -67,6 +67,10 @@ for (const t of threads) {
       author,
       imageMain: imageForCards,
       imageEnd: imageForEnd,
+      titleSeo: fields.titleSeo,
+      metaDescription: fields.metaDescription,
+      keywords: fields.keywords,
+      urlSuggested: fields.urlSuggested,
     });
 
     upsertPost({
@@ -177,13 +181,27 @@ function getPlainText(payload) {
 function parseBody(text) {
   const src = String(text || '');
   const compact = src.replace(/\s+/g, ' ').trim();
-  const out = { date: '', author: '', summary: '', body: '', title: '' };
+  const out = {
+    date: '',
+    author: '',
+    summary: '',
+    body: '',
+    title: '',
+    titleSeo: '',
+    metaDescription: '',
+    keywords: '',
+    urlSuggested: '',
+  };
 
   // Extrae campos aunque vengan en una sola línea
   out.date = pick(compact, /Fecha\s*:\s*(.+?)(?=\s+(Autor\s*:|Resumen\s*:|Cuerpo\s*:|T[íi]tulo\s*:)|$)/i);
   out.author = pick(compact, /Autor\s*:\s*(.+?)(?=\s+(Fecha\s*:|Resumen\s*:|Cuerpo\s*:|T[íi]tulo\s*:)|$)/i);
   out.summary = pick(compact, /Resumen\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Cuerpo\s*:|T[íi]tulo\s*:)|$)/i);
-  out.title = pick(compact, /T[íi]tulo\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:)|$)/i);
+  out.title = pick(compact, /T[íi]tulo\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:|Title\s*SEO\s*:|Meta\s*description\s*:|Keywords?\s*:|URL\s*sugerida\s*:)|$)/i);
+  out.titleSeo = pick(compact, /Title\s*SEO\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:|Meta\s*description\s*:|Keywords?\s*:|URL\s*sugerida\s*:)|$)/i);
+  out.metaDescription = pick(compact, /Meta\s*description\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:|Title\s*SEO\s*:|Keywords?\s*:|URL\s*sugerida\s*:)|$)/i);
+  out.keywords = pick(compact, /Keywords?\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:|Title\s*SEO\s*:|Meta\s*description\s*:|URL\s*sugerida\s*:)|$)/i);
+  out.urlSuggested = pick(compact, /URL\s*sugerida\s*:\s*(.+?)(?=\s+(Fecha\s*:|Autor\s*:|Resumen\s*:|Cuerpo\s*:|Title\s*SEO\s*:|Meta\s*description\s*:|Keywords?\s*:)|$)/i);
   // Preferimos extraer cuerpo preservando saltos de línea
   const bodyRawMatch = src.match(/Cuerpo\s*:\s*([\s\S]+)$/i);
   out.body = bodyRawMatch ? bodyRawMatch[1].trim() : pick(compact, /Cuerpo\s*:\s*(.+)$/i);
@@ -200,6 +218,10 @@ function parseBody(text) {
       else if (!out.author && /^Autor\s*:/i.test(line)) out.author = line.replace(/^Autor\s*:/i, '').trim();
       else if (!out.summary && /^Resumen\s*:/i.test(line)) out.summary = line.replace(/^Resumen\s*:/i, '').trim();
       else if (!out.title && /^T[íi]tulo\s*:/i.test(line)) out.title = line.replace(/^T[íi]tulo\s*:/i, '').trim();
+      else if (!out.titleSeo && /^Title\s*SEO\s*:/i.test(line)) out.titleSeo = line.replace(/^Title\s*SEO\s*:/i, '').trim();
+      else if (!out.metaDescription && /^Meta\s*description\s*:/i.test(line)) out.metaDescription = line.replace(/^Meta\s*description\s*:/i, '').trim();
+      else if (!out.keywords && /^Keywords?\s*:/i.test(line)) out.keywords = line.replace(/^Keywords?\s*:/i, '').trim();
+      else if (!out.urlSuggested && /^URL\s*sugerida\s*:/i.test(line)) out.urlSuggested = line.replace(/^URL\s*sugerida\s*:/i, '').trim();
       else if (/^Cuerpo\s*:/i.test(line)) {
         bodyStart = true;
         const first = line.replace(/^Cuerpo\s*:/i, '').trim();
@@ -483,14 +505,15 @@ function copyImageToAssets(src, editorial, dateISO, title, slot = '01') {
     return `./assets/uploads/${fallbackName}`;
   }
 }
-function createArticle({ editorial, dateISO, title, summary, content, author, imageMain, imageEnd }) {
+function createArticle({ editorial, dateISO, title, summary, content, author, imageMain, imageEnd, titleSeo = '', metaDescription = '', keywords = '', urlSuggested = '' }) {
   const [year] = dateISO.split('-');
   const monthFolder = monthFolderFromISO(dateISO);
   const editorialSlug = editorial.toLowerCase();
   const folder = path.join(ROOT, 'historicos', year, monthFolder, editorialSlug);
   fs.mkdirSync(folder, { recursive: true });
 
-  const fileName = `${nextNumber(folder)}_${dateISO}_${slugify(title)}.html`;
+  const slugBase = slugify(String(urlSuggested || '').replace(/^\/+/, '')) || slugify(title);
+  const fileName = `${nextNumber(folder)}_${dateISO}_${slugBase}.html`;
   const filePath = path.join(folder, fileName);
   const relUrl = `./historicos/${year}/${monthFolder}/${editorialSlug}/${fileName}`;
   const articleImageMain = String(imageMain || '').startsWith('./assets/')
@@ -504,8 +527,15 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
     ? 'linear-gradient(135deg, #efe6ff 0%, #ffffff 100%)'
     : 'linear-gradient(135deg, #ffeedc 0%, #ffffff 100%)';
 
+  const seoTitle = String(titleSeo || title).trim();
+  const seoDescription = clampSummary(metaDescription || summary);
+  const seoKeywords = String(keywords || '').trim();
+
   const html = `<!doctype html>
-<html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${escapeHTML(title)}</title></head>
+<html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${escapeHTML(seoTitle)}</title>
+<meta name="description" content="${escapeHTML(seoDescription)}"/>
+${seoKeywords ? `<meta name="keywords" content="${escapeHTML(seoKeywords)}"/>` : ''}
+</head>
 <body style="font-family:Inter,system-ui,sans-serif;background:${articleBg};padding:20px;color:#222">
 <div style="max-width:800px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:12px;padding:20px;line-height:1.6;">
 <a href="../../../../index.html">← Volver a portada</a>
