@@ -7,7 +7,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 
 
 def main():
@@ -113,18 +113,27 @@ def main():
     story.append(Spacer(1, 12))
 
     story.append(Paragraph("Detalle de menciones por artículo", styles["H2"]))
-    detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"]]
-    for d in mention_by_article[:60]:
-        detail_rows.append([
-            d.get("fecha", ""),
-            Paragraph(str(d.get("titulo", "")), styles["Normal"]),
-            Paragraph(", ".join(d.get("entidades", [])), styles["Normal"]),
-        ])
-    if len(detail_rows) == 1:
-        detail_rows.append(["—", "Sin menciones", "—"])
-    detail_table = Table(detail_rows, colWidths=[70, 220, 190])
-    style_table(detail_table)
-    story.append(detail_table)
+    if not mention_by_article:
+        detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"], ["—", "Sin menciones", "—"]]
+        detail_table = Table(detail_rows, colWidths=[70, 220, 190], repeatRows=1)
+        style_table(detail_table)
+        story.append(detail_table)
+    else:
+        chunk_size = 18
+        for i in range(0, min(len(mention_by_article), 60), chunk_size):
+            chunk = mention_by_article[i:i+chunk_size]
+            detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"]]
+            for d in chunk:
+                detail_rows.append([
+                    d.get("fecha", ""),
+                    Paragraph(str(d.get("titulo", "")), styles["Normal"]),
+                    Paragraph(", ".join(d.get("entidades", [])), styles["Normal"]),
+                ])
+            detail_table = Table(detail_rows, colWidths=[70, 220, 190], repeatRows=1)
+            style_table(detail_table)
+            story.append(detail_table)
+            if i + chunk_size < min(len(mention_by_article), 60):
+                story.append(Spacer(1, 10))
     story.append(Spacer(1, 16))
 
     story.append(Paragraph("Detalle de artículos del periodo", styles["H2"]))
@@ -159,6 +168,7 @@ def style_table(table):
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
         ('TOPPADDING', (0, 0), (-1, -1), 6),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+        ('NOSPLIT', (0, 1), (-1, -1)),
     ]))
 
 
