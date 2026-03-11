@@ -20,6 +20,68 @@
     "UCM": 1,
     "URJC": 1
   },
+  "mentionDetails": [
+    {
+      "fecha": "2026-03-03",
+      "tipo": "asociacion",
+      "entidad": "CRIS",
+      "titulo": "La Cátedra Extraordinaria CRIS-UCM impulsa el futuro de los médicos investigadores en España"
+    },
+    {
+      "fecha": "2026-03-11",
+      "tipo": "entidad",
+      "entidad": "EFPIA",
+      "titulo": "La oncología de precisión, clave para mejorar resultados y reducir inequidades"
+    },
+    {
+      "fecha": "2026-03-11",
+      "tipo": "farmaceutica",
+      "entidad": "FarmaIndustria",
+      "titulo": "La oncología de precisión, clave para mejorar resultados y reducir inequidades"
+    },
+    {
+      "fecha": "2026-03-11",
+      "tipo": "asociacion",
+      "entidad": "GEPAC",
+      "titulo": "La oncología de precisión, clave para mejorar resultados y reducir inequidades"
+    },
+    {
+      "fecha": "2026-03-10",
+      "tipo": "asociacion",
+      "entidad": "GEPAC",
+      "titulo": "La tecnología también acompaña a los pacientes"
+    },
+    {
+      "fecha": "2026-03-03",
+      "tipo": "asociacion",
+      "entidad": "GEPAC",
+      "titulo": "La Cátedra Extraordinaria CRIS-UCM impulsa el futuro de los médicos investigadores en España"
+    },
+    {
+      "fecha": "2026-03-02",
+      "tipo": "asociacion",
+      "entidad": "GEPAC",
+      "titulo": "Los XIV Premios GEPAC reconocerán las “Obras que cambian vidas” en oncología"
+    },
+    {
+      "fecha": "2026-03-01",
+      "tipo": "asociacion",
+      "entidad": "GEPAC",
+      "titulo": "El liderazgo en organizaciones de pacientes da un paso histórico con el nuevo Máster Universitario impulsado por URJC y GEPAC"
+    },
+    {
+      "fecha": "2026-03-03",
+      "tipo": "entidad",
+      "entidad": "UCM",
+      "titulo": "La Cátedra Extraordinaria CRIS-UCM impulsa el futuro de los médicos investigadores en España"
+    },
+    {
+      "fecha": "2026-03-01",
+      "tipo": "entidad",
+      "entidad": "URJC",
+      "titulo": "El liderazgo en organizaciones de pacientes da un paso histórico con el nuevo Máster Universitario impulsado por URJC y GEPAC"
+    }
+  ],
   "posts": [
     {
       "date": "2026-03-11",

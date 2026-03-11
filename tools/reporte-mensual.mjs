@@ -41,6 +41,7 @@ const byEditor = countBy(monthRows, 'editor');
 const byEmail = countBy(monthRows, 'email_remitente');
 const byType = countBy(mencRows, 'tipo');
 const byEntity = countBy(mencRows, 'entidad');
+const mentionDetails = buildMentionDetails(mencRows);
 
 const lines = [];
 lines.push(`# Informe mensual blog · ${yy}-${mm}`);
@@ -62,6 +63,11 @@ if (mencRows.length === 0) {
   lines.push('');
   lines.push('### Top entidades mencionadas');
   for (const [k, v] of topEntries(byEntity, 25)) lines.push(`- ${k}: ${v}`);
+  lines.push('');
+  lines.push('### Detalle de menciones (entidad y artículo)');
+  for (const d of mentionDetails.slice(0, 200)) {
+    lines.push(`- [${d.tipo}] ${d.entidad} → ${d.titulo} (${d.fecha})`);
+  }
 }
 
 const reportMd = lines.join('\n') + '\n';
@@ -85,6 +91,7 @@ const summary = {
   byEmail,
   byType,
   byEntity,
+  mentionDetails,
   posts: monthPosts.map((p) => ({ date: p.date, editorial: p.editorial, title: p.title })),
 };
 fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
@@ -157,6 +164,21 @@ function countBy(rows, key) {
 
 function topEntries(obj, limit = 10) {
   return Object.entries(obj).sort((a, b) => b[1] - a[1]).slice(0, limit);
+}
+
+function buildMentionDetails(rows) {
+  return rows
+    .map((r) => ({
+      fecha: (r.fecha || '').trim(),
+      tipo: (r.tipo || '').trim(),
+      entidad: (r.entidad || '').trim(),
+      titulo: (r.titulo || '').trim(),
+    }))
+    .sort((a, b) => {
+      if (a.entidad !== b.entidad) return a.entidad.localeCompare(b.entidad, 'es');
+      if (a.fecha !== b.fecha) return b.fecha.localeCompare(a.fecha);
+      return a.titulo.localeCompare(b.titulo, 'es');
+    });
 }
 
 function exec(cmd) {
