@@ -7,7 +7,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, CondPageBreak
 
 
 def main():
@@ -108,16 +108,10 @@ def main():
     if len(mention_rows) == 1:
         mention_rows.append(["Sin menciones", "0"])
 
-    # Evita cuadros partidos: render por bloques pequeños
-    mention_chunk = 10
-    data_rows = mention_rows[1:]
-    for i in range(0, len(data_rows), mention_chunk):
-        chunk = [["Entidad", "Nº menciones"]] + data_rows[i:i+mention_chunk]
-        mention_table = Table(chunk, colWidths=[360, 120], repeatRows=1)
-        style_table(mention_table)
-        story.append(mention_table)
-        if i + mention_chunk < len(data_rows):
-            story.append(Spacer(1, 8))
+    story.append(CondPageBreak(160))
+    mention_table = Table(mention_rows, colWidths=[360, 120], repeatRows=1)
+    style_table(mention_table)
+    story.append(mention_table)
     story.append(Spacer(1, 12))
 
     story.append(Paragraph("Detalle de menciones por artículo", styles["H2"]))
@@ -127,7 +121,7 @@ def main():
         style_table(detail_table)
         story.append(detail_table)
     else:
-        chunk_size = 8
+        chunk_size = 14
         for i in range(0, min(len(mention_by_article), 60), chunk_size):
             chunk = mention_by_article[i:i+chunk_size]
             detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"]]
@@ -176,7 +170,6 @@ def style_table(table):
         ('RIGHTPADDING', (0, 0), (-1, -1), 8),
         ('TOPPADDING', (0, 0), (-1, -1), 6),
         ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
-        ('NOSPLIT', (0, 1), (-1, -1)),
     ]))
 
 
