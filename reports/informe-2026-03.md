@@ -3,6 +3,13 @@
 - Publicaciones registradas: **1**
 - GEPAC: **1** · AEAL: **0**
 
+## KPI editoriales (internos)
+- Días con publicación: **5**
+- Artículos por día activo: **1.00**
+- Longitud media del resumen: **156** caracteres
+- Menciones por artículo: **2.00**
+- Artículo con más menciones: **La oncología de precisión, clave para mejorar resultados y reducir inequidades** (3)
+
 ## Autoría (por email remitente)
 - fcalderonhuerta@hotmail.com: 1
 

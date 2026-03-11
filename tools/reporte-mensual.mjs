@@ -22,6 +22,7 @@ const posts = JSON.parse(fs.readFileSync(path.join(dataDir, 'posts.json'), 'utf8
 let monthRows = autoria.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
 const mencRows = menciones.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
 const monthPosts = posts.filter((p) => String(p.date || '').startsWith(`${yy}-${mm}`));
+const kpi = buildKpi(monthPosts, mencRows);
 
 // Fallback para meses previos sin log de autoría histórico
 if (monthRows.length === 0 && monthPosts.length > 0) {
@@ -49,6 +50,13 @@ lines.push(`# Informe mensual blog · ${yy}-${mm}`);
 lines.push('');
 lines.push(`- Publicaciones registradas: **${total}**`);
 lines.push(`- GEPAC: **${byEditor.GEPAC || 0}** · AEAL: **${byEditor.AEAL || 0}**`);
+lines.push('');
+lines.push('## KPI editoriales (internos)');
+lines.push(`- Días con publicación: **${kpi.daysWithPosts}**`);
+lines.push(`- Artículos por día activo: **${kpi.postsPerActiveDay}**`);
+lines.push(`- Longitud media del resumen: **${kpi.avgSummaryLength}** caracteres`);
+lines.push(`- Menciones por artículo: **${kpi.mentionsPerPost}**`);
+if (kpi.topMentionedTitle) lines.push(`- Artículo con más menciones: **${kpi.topMentionedTitle}** (${kpi.topMentionedCount})`);
 lines.push('');
 lines.push('## Autoría (por email remitente)');
 if (Object.keys(byEmail).length === 0) lines.push('- Sin datos');
@@ -95,6 +103,7 @@ const summary = {
   byEntity,
   mentionDetails,
   mentionByArticle,
+  kpi,
   posts: monthPosts.map((p) => ({ date: p.date, editorial: p.editorial, title: p.title })),
 };
 fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
@@ -203,6 +212,32 @@ function buildMentionByArticle(rows) {
       entidades: Array.from(x.entidades).filter(Boolean).sort((a, b) => a.localeCompare(b, 'es')),
     }))
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
+}
+
+function buildKpi(monthPosts, mencRows) {
+  const days = new Set(monthPosts.map((p) => p.date)).size;
+  const postsPerActiveDay = days ? (monthPosts.length / days).toFixed(2) : '0.00';
+  const avgSummaryLength = monthPosts.length
+    ? Math.round(monthPosts.reduce((acc, p) => acc + String(p.summary || '').length, 0) / monthPosts.length)
+    : 0;
+  const mentionsPerPost = monthPosts.length ? (mencRows.length / monthPosts.length).toFixed(2) : '0.00';
+
+  const byTitle = {};
+  for (const r of mencRows) {
+    const t = (r.titulo || '').trim();
+    if (!t) continue;
+    byTitle[t] = (byTitle[t] || 0) + 1;
+  }
+  const top = Object.entries(byTitle).sort((a, b) => b[1] - a[1])[0];
+
+  return {
+    daysWithPosts: days,
+    postsPerActiveDay,
+    avgSummaryLength,
+    mentionsPerPost,
+    topMentionedTitle: top ? top[0] : '',
+    topMentionedCount: top ? top[1] : 0,
+  };
 }
 
 function exec(cmd) {

@@ -124,6 +124,14 @@
       ]
     }
   ],
+  "kpi": {
+    "daysWithPosts": 5,
+    "postsPerActiveDay": "1.00",
+    "avgSummaryLength": 156,
+    "mentionsPerPost": "2.00",
+    "topMentionedTitle": "La oncología de precisión, clave para mejorar resultados y reducir inequidades",
+    "topMentionedCount": 3
+  },
   "posts": [
     {
       "date": "2026-03-11",

@@ -50,6 +50,7 @@ def main():
     mention_details = data.get("mentionDetails", [])
     mention_by_article = data.get("mentionByArticle", [])
     posts = data.get("posts", [])
+    kpi = data.get("kpi", {})
 
     summary_text = (
         f"Durante el periodo {period} se registraron <b>{total}</b> publicaciones en el blog. "
@@ -71,6 +72,21 @@ def main():
     ], colWidths=[300, 180])
     style_table(summary_table)
     story.append(summary_table)
+    story.append(Spacer(1, 16))
+
+    story.append(Spacer(1, 16))
+    story.append(Paragraph("KPI editoriales (internos)", styles["H2"]))
+    kpi_rows = [["KPI", "Valor"],
+        ["Días con publicación", str(kpi.get("daysWithPosts", 0))],
+        ["Artículos por día activo", str(kpi.get("postsPerActiveDay", "0.00"))],
+        ["Longitud media del resumen (car.)", str(kpi.get("avgSummaryLength", 0))],
+        ["Menciones por artículo", str(kpi.get("mentionsPerPost", "0.00"))],
+    ]
+    if kpi.get("topMentionedTitle"):
+        kpi_rows.append(["Artículo con más menciones", Paragraph(f"{kpi.get('topMentionedTitle')} ({kpi.get('topMentionedCount',0)})", styles["Normal"])])
+    kpi_table = Table(kpi_rows, colWidths=[260, 220])
+    style_table(kpi_table)
+    story.append(kpi_table)
     story.append(Spacer(1, 16))
 
     story.append(Paragraph("Control de autoría (emails remitentes)", styles["H2"]))
