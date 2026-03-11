@@ -37,8 +37,8 @@ if (monthRows.length === 0 && monthPosts.length > 0) {
   }));
 }
 
-const total = monthRows.length;
-const byEditor = countBy(monthRows, 'editor');
+const total = monthPosts.length;
+const byEditor = countBy(monthPosts.map((p) => ({ editor: p.editorial })), 'editor');
 const byEmail = countBy(monthRows, 'email_remitente');
 const byType = countBy(mencRows, 'tipo');
 const byEntity = countBy(mencRows, 'entidad');

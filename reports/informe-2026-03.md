@@ -1,7 +1,7 @@
 # Informe mensual blog · 2026-03
 
-- Publicaciones registradas: **1**
-- GEPAC: **1** · AEAL: **0**
+- Publicaciones registradas: **5**
+- GEPAC: **5** · AEAL: **0**
 
 ## KPI editoriales (internos)
 - Días con publicación: **5**
