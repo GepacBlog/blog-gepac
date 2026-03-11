@@ -48,6 +48,7 @@ def main():
     by_type = data.get("byType", {})
     by_entity = data.get("byEntity", {})
     mention_details = data.get("mentionDetails", [])
+    mention_by_article = data.get("mentionByArticle", [])
     posts = data.get("posts", [])
 
     summary_text = (
@@ -94,17 +95,17 @@ def main():
     story.append(mention_table)
     story.append(Spacer(1, 12))
 
-    story.append(Paragraph("Detalle de menciones (entidad y artículo)", styles["H2"]))
-    detail_rows = [["Tipo", "Entidad", "Artículo"]]
-    for d in mention_details[:60]:
+    story.append(Paragraph("Detalle de menciones por artículo", styles["H2"]))
+    detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"]]
+    for d in mention_by_article[:60]:
         detail_rows.append([
-            d.get("tipo", ""),
-            Paragraph(str(d.get("entidad", "")), styles["Normal"]),
+            d.get("fecha", ""),
             Paragraph(str(d.get("titulo", "")), styles["Normal"]),
+            Paragraph(", ".join(d.get("entidades", [])), styles["Normal"]),
         ])
     if len(detail_rows) == 1:
         detail_rows.append(["—", "Sin menciones", "—"])
-    detail_table = Table(detail_rows, colWidths=[70, 140, 270])
+    detail_table = Table(detail_rows, colWidths=[70, 220, 190])
     style_table(detail_table)
     story.append(detail_table)
     story.append(Spacer(1, 16))

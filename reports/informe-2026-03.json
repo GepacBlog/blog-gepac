@@ -82,6 +82,48 @@
       "titulo": "El liderazgo en organizaciones de pacientes da un paso histórico con el nuevo Máster Universitario impulsado por URJC y GEPAC"
     }
   ],
+  "mentionByArticle": [
+    {
+      "fecha": "2026-03-11",
+      "titulo": "La oncología de precisión, clave para mejorar resultados y reducir inequidades",
+      "entidades": [
+        "EFPIA",
+        "FarmaIndustria",
+        "GEPAC"
+      ]
+    },
+    {
+      "fecha": "2026-03-10",
+      "titulo": "La tecnología también acompaña a los pacientes",
+      "entidades": [
+        "GEPAC"
+      ]
+    },
+    {
+      "fecha": "2026-03-03",
+      "titulo": "La Cátedra Extraordinaria CRIS-UCM impulsa el futuro de los médicos investigadores en España",
+      "entidades": [
+        "CRIS",
+        "GEPAC",
+        "UCM"
+      ]
+    },
+    {
+      "fecha": "2026-03-02",
+      "titulo": "Los XIV Premios GEPAC reconocerán las “Obras que cambian vidas” en oncología",
+      "entidades": [
+        "GEPAC"
+      ]
+    },
+    {
+      "fecha": "2026-03-01",
+      "titulo": "El liderazgo en organizaciones de pacientes da un paso histórico con el nuevo Máster Universitario impulsado por URJC y GEPAC",
+      "entidades": [
+        "GEPAC",
+        "URJC"
+      ]
+    }
+  ],
   "posts": [
     {
       "date": "2026-03-11",

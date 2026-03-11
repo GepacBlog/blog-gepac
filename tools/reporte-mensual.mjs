@@ -42,6 +42,7 @@ const byEmail = countBy(monthRows, 'email_remitente');
 const byType = countBy(mencRows, 'tipo');
 const byEntity = countBy(mencRows, 'entidad');
 const mentionDetails = buildMentionDetails(mencRows);
+const mentionByArticle = buildMentionByArticle(mencRows);
 
 const lines = [];
 lines.push(`# Informe mensual blog · ${yy}-${mm}`);
@@ -64,9 +65,10 @@ if (mencRows.length === 0) {
   lines.push('### Top entidades mencionadas');
   for (const [k, v] of topEntries(byEntity, 25)) lines.push(`- ${k}: ${v}`);
   lines.push('');
-  lines.push('### Detalle de menciones (entidad y artículo)');
-  for (const d of mentionDetails.slice(0, 200)) {
-    lines.push(`- [${d.tipo}] ${d.entidad} → ${d.titulo} (${d.fecha})`);
+  lines.push('### Detalle por artículo');
+  for (const a of mentionByArticle.slice(0, 200)) {
+    lines.push(`- **${a.titulo}** (${a.fecha})`);
+    lines.push(`  - Entidades mencionadas: ${a.entidades.join(', ')}`);
   }
 }
 
@@ -92,6 +94,7 @@ const summary = {
   byType,
   byEntity,
   mentionDetails,
+  mentionByArticle,
   posts: monthPosts.map((p) => ({ date: p.date, editorial: p.editorial, title: p.title })),
 };
 fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
@@ -179,6 +182,27 @@ function buildMentionDetails(rows) {
       if (a.fecha !== b.fecha) return b.fecha.localeCompare(a.fecha);
       return a.titulo.localeCompare(b.titulo, 'es');
     });
+}
+
+function buildMentionByArticle(rows) {
+  const map = new Map();
+  for (const r of rows) {
+    const title = (r.titulo || '').trim();
+    const date = (r.fecha || '').trim();
+    const key = `${date}::${title}`;
+    if (!map.has(key)) {
+      map.set(key, { fecha: date, titulo: title, entidades: new Set() });
+    }
+    map.get(key).entidades.add((r.entidad || '').trim());
+  }
+
+  return Array.from(map.values())
+    .map((x) => ({
+      fecha: x.fecha,
+      titulo: x.titulo,
+      entidades: Array.from(x.entidades).filter(Boolean).sort((a, b) => a.localeCompare(b, 'es')),
+    }))
+    .sort((a, b) => b.fecha.localeCompare(a.fecha));
 }
 
 function exec(cmd) {
