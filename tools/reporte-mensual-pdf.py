@@ -107,9 +107,17 @@ def main():
         mention_rows.append([Paragraph(str(k), styles["Normal"]), str(v)])
     if len(mention_rows) == 1:
         mention_rows.append(["Sin menciones", "0"])
-    mention_table = Table(mention_rows, colWidths=[360, 120])
-    style_table(mention_table)
-    story.append(mention_table)
+
+    # Evita cuadros partidos: render por bloques pequeños
+    mention_chunk = 10
+    data_rows = mention_rows[1:]
+    for i in range(0, len(data_rows), mention_chunk):
+        chunk = [["Entidad", "Nº menciones"]] + data_rows[i:i+mention_chunk]
+        mention_table = Table(chunk, colWidths=[360, 120], repeatRows=1)
+        style_table(mention_table)
+        story.append(mention_table)
+        if i + mention_chunk < len(data_rows):
+            story.append(Spacer(1, 8))
     story.append(Spacer(1, 12))
 
     story.append(Paragraph("Detalle de menciones por artículo", styles["H2"]))
@@ -119,7 +127,7 @@ def main():
         style_table(detail_table)
         story.append(detail_table)
     else:
-        chunk_size = 18
+        chunk_size = 8
         for i in range(0, min(len(mention_by_article), 60), chunk_size):
             chunk = mention_by_article[i:i+chunk_size]
             detail_rows = [["Fecha", "Artículo", "Entidades mencionadas"]]
