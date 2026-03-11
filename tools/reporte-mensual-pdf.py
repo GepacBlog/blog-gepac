@@ -101,6 +101,8 @@ def main():
     story.append(author_table)
     story.append(Spacer(1, 16))
 
+    # Evita dejar el título de sección huérfano al final de página
+    story.append(CondPageBreak(220))
     story.append(Paragraph("Menciones detectadas (potenciales patrocinadores/entidades)", styles["H2"]))
     mention_rows = [["Entidad", "Nº menciones"]]
     for k, v in sorted(by_entity.items(), key=lambda x: x[1], reverse=True)[:25]:
