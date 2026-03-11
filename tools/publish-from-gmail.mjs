@@ -45,7 +45,7 @@ for (const t of threads) {
     const title = fields.title || parsed.title || 'Sin título';
     const rawContent = fields.body || bodyWithoutHeaders(bodyText) || bodyText || 'Contenido pendiente';
     const content = sanitizeBody(rawContent);
-    const summary = clampSummary(fields.summary || firstCleanSentence(content) || 'Resumen pendiente');
+    const summary = clampSummary(firstCleanSentence(content) || 'Resumen pendiente');
     const author = fields.author || (editorial === 'GEPAC' ? 'Equipo GEPAC' : 'Equipo AEAL');
     const fallbackDate = toISODate(new Date(Number(message.internalDate || Date.now())));
     const dateISO = normalizeDate(fields.date) || fallbackDate;
@@ -216,7 +216,6 @@ function parseBody(text) {
       if (!line && bodyStart) { bodyLines.push(''); continue; }
       if (!out.date && /^Fecha\s*:/i.test(line)) out.date = line.replace(/^Fecha\s*:/i, '').trim();
       else if (!out.author && /^Autor\s*:/i.test(line)) out.author = line.replace(/^Autor\s*:/i, '').trim();
-      else if (!out.summary && /^Resumen\s*:/i.test(line)) out.summary = line.replace(/^Resumen\s*:/i, '').trim();
       else if (!out.title && /^T[íi]tulo\s*:/i.test(line)) out.title = line.replace(/^T[íi]tulo\s*:/i, '').trim();
       else if (!out.titleSeo && /^Title\s*SEO\s*:/i.test(line)) out.titleSeo = line.replace(/^Title\s*SEO\s*:/i, '').trim();
       else if (!out.metaDescription && /^Meta\s*description\s*:/i.test(line)) out.metaDescription = line.replace(/^Meta\s*description\s*:/i, '').trim();

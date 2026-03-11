@@ -8,7 +8,6 @@ PLANTILLA OFICIAL PARA EDITORES · ENVÍO DE ARTÍCULOS
 Título: [Título completo del artículo]
 Fecha: [YYYY-MM-DD]
 Autor: [Nombre o equipo]
-Resumen: [Entradilla breve para portada]
 Cuerpo:
 [Párrafo 1]
 
@@ -36,7 +35,6 @@ Formatos: JPG o PNG
 6) CHECKLIST
 [ ] Asunto correcto (Editorial GEPAC/AEAL + título)
 [ ] Fecha en formato YYYY-MM-DD
-[ ] Resumen escrito
 [ ] Cuerpo completo incluido
 [ ] Imágenes 01/02 adjuntas
 [ ] SEO incluido (si disponible)
