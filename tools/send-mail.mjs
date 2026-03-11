@@ -31,7 +31,7 @@ if (!to || !subject || !body) {
 const esc = (v = '') => `'${String(v).replace(/'/g, `'\\''`)}'`;
 
 const bodyHtml = corpTemplate
-  ? `<div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#1f2533"><p>${String(body).replace(/\n/g, '<br/>')}</p><hr style="border:none;border-top:1px solid #e1e6f0;margin:16px 0"/><p style="font-size:12px;color:#667085">Equipo GEPAC · Comunicación</p></div>`
+  ? `<div style="font-family:Inter,Arial,sans-serif;line-height:1.55;color:#1f2533"><p>${String(body).replace(/\n/g, '<br/>')}</p><hr style="border:none;border-top:1px solid #e1e6f0;margin:16px 0"/><p style="font-size:12px;color:#667085">Equipo Krokland · Comunicación</p></div>`
   : String(body).replace(/\n/g, '<br/>');
 
 let cmd = `gog gmail send --account ${esc(account)} --to ${esc(to)} --subject ${esc(subject)} --no-input`;
