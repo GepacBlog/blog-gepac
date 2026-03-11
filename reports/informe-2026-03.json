@@ -1,29 +1,35 @@
 {
   "period": "2026-03",
-  "total": 4,
+  "total": 1,
   "byEditor": {
-    "AEAL": 1,
-    "GEPAC": 3
+    "GEPAC": 1
   },
   "byEmail": {
-    "(sin email histórico)": 4
+    "fcalderonhuerta@hotmail.com": 1
   },
   "byType": {
+    "farmaceutica": 1,
     "asociacion": 6,
-    "entidad": 2
+    "entidad": 3
   },
   "byEntity": {
-    "GEPAC": 4,
-    "AEAL": 1,
+    "FarmaIndustria": 1,
+    "GEPAC": 5,
+    "EFPIA": 1,
     "CRIS": 1,
     "UCM": 1,
     "URJC": 1
   },
   "posts": [
     {
-      "date": "2026-03-07",
-      "editorial": "AEAL",
-      "title": "La EICR crónica: una enfermedad invisible tras el trasplante de médula ósea que requiere un abordaje integral"
+      "date": "2026-03-11",
+      "editorial": "GEPAC",
+      "title": "La oncología de precisión, clave para mejorar resultados y reducir inequidades"
+    },
+    {
+      "date": "2026-03-10",
+      "editorial": "GEPAC",
+      "title": "La tecnología también acompaña a los pacientes"
     },
     {
       "date": "2026-03-03",

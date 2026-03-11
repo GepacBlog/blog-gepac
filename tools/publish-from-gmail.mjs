@@ -617,30 +617,47 @@ function appendMentionsLog({ editorial = '', title = '', threadId = '', text = '
 function detectMentions(text = '') {
   const t = normalizeText(text);
   const catalog = [
-    { type: 'farmaceutica', name: 'Sanofi' },
-    { type: 'farmaceutica', name: 'Menarini' },
-    { type: 'farmaceutica', name: 'Roche' },
-    { type: 'farmaceutica', name: 'Novartis' },
-    { type: 'farmaceutica', name: 'Pfizer' },
-    { type: 'farmaceutica', name: 'AstraZeneca' },
-    { type: 'farmaceutica', name: 'BMS' },
-    { type: 'farmaceutica', name: 'MSD' },
-    { type: 'farmaceutica', name: 'GSK' },
-    { type: 'farmaceutica', name: 'Janssen' },
-    { type: 'asociacion', name: 'GEPAC' },
-    { type: 'asociacion', name: 'AEAL' },
-    { type: 'asociacion', name: 'Fundación Sandra Ibarra' },
-    { type: 'asociacion', name: 'CRIS' },
-    { type: 'entidad', name: 'UAM' },
-    { type: 'entidad', name: 'URJC' },
-    { type: 'entidad', name: 'UCM' },
+    { type: 'farmaceutica', name: 'FarmaIndustria', aliases: ['FarmaIndustria', 'Farma Industria'] },
+    { type: 'farmaceutica', name: 'Sanofi', aliases: ['Sanofi'] },
+    { type: 'farmaceutica', name: 'Menarini', aliases: ['Menarini', 'Menarini Stemline'] },
+    { type: 'farmaceutica', name: 'Roche', aliases: ['Roche', 'Roche Pharma'] },
+    { type: 'farmaceutica', name: 'Novartis', aliases: ['Novartis'] },
+    { type: 'farmaceutica', name: 'Pfizer', aliases: ['Pfizer'] },
+    { type: 'farmaceutica', name: 'AstraZeneca', aliases: ['AstraZeneca', 'Astra Zeneca'] },
+    { type: 'farmaceutica', name: 'BMS', aliases: ['BMS', 'Bristol Myers Squibb'] },
+    { type: 'farmaceutica', name: 'MSD', aliases: ['MSD'] },
+    { type: 'farmaceutica', name: 'GSK', aliases: ['GSK', 'GlaxoSmithKline'] },
+    { type: 'farmaceutica', name: 'Janssen', aliases: ['Janssen'] },
+    { type: 'farmaceutica', name: 'AbbVie', aliases: ['AbbVie', 'Abbvie'] },
+    { type: 'farmaceutica', name: 'Amgen', aliases: ['Amgen'] },
+    { type: 'asociacion', name: 'GEPAC', aliases: ['GEPAC'] },
+    { type: 'asociacion', name: 'AEAL', aliases: ['AEAL'] },
+    { type: 'asociacion', name: 'Fundación Sandra Ibarra', aliases: ['Fundación Sandra Ibarra', 'Fundacion Sandra Ibarra'] },
+    { type: 'asociacion', name: 'CRIS', aliases: ['CRIS', 'CRIS contra el cancer'] },
+    { type: 'entidad', name: 'UAM', aliases: ['UAM'] },
+    { type: 'entidad', name: 'URJC', aliases: ['URJC'] },
+    { type: 'entidad', name: 'UCM', aliases: ['UCM'] },
+    { type: 'entidad', name: 'EFPIA', aliases: ['EFPIA', 'Efpia'] },
+    { type: 'entidad', name: 'SESCAM', aliases: ['SESCAM'] },
+    { type: 'entidad', name: 'SEOM', aliases: ['SEOM'] },
+    { type: 'entidad', name: 'AEMPS', aliases: ['AEMPS'] },
   ];
 
   const out = [];
+  const seen = new Set();
   for (const c of catalog) {
-    const key = normalizeText(c.name);
-    const re = new RegExp(`\\b${escapeRegExp(key)}\\b`);
-    if (re.test(t)) out.push(c);
+    const aliases = (c.aliases && c.aliases.length ? c.aliases : [c.name]).map((a) => normalizeText(a));
+    const matched = aliases.some((key) => {
+      const re = new RegExp(`\\b${escapeRegExp(key)}\\b`);
+      return re.test(t);
+    });
+    if (!matched) continue;
+
+    const sig = `${c.type}::${c.name}`;
+    if (!seen.has(sig)) {
+      seen.add(sig);
+      out.push({ type: c.type, name: c.name });
+    }
   }
   return out;
 }
