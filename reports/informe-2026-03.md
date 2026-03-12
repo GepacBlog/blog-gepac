@@ -11,6 +11,9 @@
 - Entidades únicas mencionadas: **6**
 - Artículo con más menciones: **La oncología de precisión, clave para mejorar resultados y reducir inequidades** (3)
 
+## KPI de impacto (GA4 · últimos 30 días)
+- Sin datos GA4 todavía
+
 ## Autoría (por email remitente)
 - fcalderonhuerta@hotmail.com: 1
 

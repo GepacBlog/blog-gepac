@@ -18,6 +18,7 @@ if (!yy || !mm) {
 const autoria = readCsv(path.join(dataDir, 'control_autoria.csv'));
 const menciones = readCsv(path.join(dataDir, 'control_menciones.csv'));
 const posts = JSON.parse(fs.readFileSync(path.join(dataDir, 'posts.json'), 'utf8'));
+const ga4 = readJson(path.join(dataDir, 'ga4-kpi.json')) || {};
 
 let monthRows = autoria.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
 const mencRows = menciones.filter((r) => String(r.fecha || '').startsWith(`${yy}-${mm}`));
@@ -58,6 +59,21 @@ lines.push(`- Cadencia media (artículos/semana): **${kpi.postsPerWeek}**`);
 lines.push(`- Menciones totales: **${kpi.totalMentions}**`);
 lines.push(`- Entidades únicas mencionadas: **${kpi.uniqueEntities}**`);
 if (kpi.topMentionedTitle) lines.push(`- Artículo con más menciones: **${kpi.topMentionedTitle}** (${kpi.topMentionedCount})`);
+lines.push('');
+lines.push('## KPI de impacto (GA4 · últimos 30 días)');
+if (!ga4.sessions && !ga4.users) {
+  lines.push('- Sin datos GA4 todavía');
+} else {
+  lines.push(`- Sesiones: **${ga4.sessions || 0}**`);
+  lines.push(`- Usuarios: **${ga4.users || 0}**`);
+  lines.push(`- Tiempo de interacción acumulado: **${ga4.engagementSeconds || 0} s**`);
+  const top = (ga4.topPagesByViews || []).slice(0, 5);
+  if (top.length) {
+    lines.push('- Top páginas por visualizaciones:');
+    for (const p of top) lines.push(`  - ${p.pagePath}: ${p.views}`);
+  }
+}
+
 lines.push('');
 lines.push('## Autoría (por email remitente)');
 if (Object.keys(byEmail).length === 0) lines.push('- Sin datos');
@@ -105,6 +121,7 @@ const summary = {
   mentionDetails,
   mentionByArticle,
   kpi,
+  ga4,
   posts: monthPosts.map((p) => ({ date: p.date, editorial: p.editorial, title: p.title })),
 };
 fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
@@ -144,6 +161,11 @@ function readCsv(file) {
     cols.forEach((c, i) => (o[c] = vals[i] || ''));
     return o;
   });
+}
+
+function readJson(file) {
+  if (!fs.existsSync(file)) return null;
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return null; }
 }
 
 function parseCsvLine(line) {

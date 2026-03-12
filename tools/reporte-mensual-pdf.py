@@ -51,6 +51,7 @@ def main():
     mention_by_article = data.get("mentionByArticle", [])
     posts = data.get("posts", [])
     kpi = data.get("kpi", {})
+    ga4 = data.get("ga4", {})
 
     summary_text = (
         f"Durante el periodo {period} se registraron <b>{total}</b> publicaciones en el blog. "
@@ -88,6 +89,17 @@ def main():
     kpi_table = Table(kpi_rows, colWidths=[260, 220])
     style_table(kpi_table)
     story.append(kpi_table)
+    story.append(Spacer(1, 16))
+
+    story.append(Paragraph("KPI de impacto (GA4 · últimos 30 días)", styles["H2"]))
+    ga4_rows = [["Indicador", "Valor"],
+      ["Sesiones", str(ga4.get("sessions", 0))],
+      ["Usuarios", str(ga4.get("users", 0))],
+      ["Tiempo interacción acumulado (s)", str(ga4.get("engagementSeconds", 0))],
+    ]
+    ga4_table = Table(ga4_rows, colWidths=[300, 180])
+    style_table(ga4_table)
+    story.append(ga4_table)
     story.append(Spacer(1, 16))
 
     story.append(Paragraph("Control de autoría (emails remitentes)", styles["H2"]))
