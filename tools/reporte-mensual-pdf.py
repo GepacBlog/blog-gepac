@@ -7,7 +7,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, CondPageBreak, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, CondPageBreak, KeepTogether, PageBreak
 
 
 def main():
@@ -113,6 +113,7 @@ def main():
     story.append(author_table)
     story.append(Spacer(1, 16))
 
+    story.append(PageBreak())
     mention_rows = [["Entidad", "Nº menciones"]]
     for k, v in sorted(by_entity.items(), key=lambda x: x[1], reverse=True)[:25]:
         mention_rows.append([Paragraph(str(k), styles["Normal"]), str(v)])
@@ -165,6 +166,7 @@ def main():
                 story.append(Spacer(1, 10))
     story.append(Spacer(1, 16))
 
+    story.append(PageBreak())
     story.append(Paragraph("Detalle de artículos del periodo", styles["H2"]))
     post_rows = [["Fecha", "Editorial", "Título"]]
     for p in sorted(posts, key=lambda x: x.get('date',''), reverse=True):
