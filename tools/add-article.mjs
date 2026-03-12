@@ -42,6 +42,7 @@ const articleHtml = `<!doctype html>
 <div style="color:#666;margin-bottom:1rem">Editorial ${editorial} · ${dateISO}</div>
 <img src="${image}" alt="${title}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>
 <p>Aquí va el contenido completo de la noticia.</p>
+<script src="../../../../js/analytics.js?v=20260312-1"></script>
 </body></html>`;
 
 fs.writeFileSync(filePath, articleHtml);

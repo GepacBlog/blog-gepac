@@ -552,6 +552,7 @@ ${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHT
 ${renderBodyHtml(content)}
 ${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
 </div>
+<script src="../../../../js/analytics.js?v=20260312-1"></script>
 </body></html>`;
 
   fs.writeFileSync(filePath, html);
