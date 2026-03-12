@@ -67,10 +67,10 @@ function renderFeatured(p) {
     <article class="featured-card ${p.editorial === "GEPAC" ? "gepac" : "aeal"}">
       <img src="${p.image}" alt="${escapeHTML(p.title)}" />
       <div>
-        <div class="meta"><span>${p.date}</span></div>
-        <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
+        <div class="meta"><span>${p.date}</span><span class="read-time">${readingTime(p)} min lectura</span></div>
+        <h3><span class="editorial-pill ${p.editorial === "GEPAC" ? "pill-gepac" : "pill-aeal"}">${escapeHTML(p.editorial)}</span> ${escapeHTML(p.title)}</h3>
         <p>${escapeHTML(p.summary)}</p>
-        <a class="read-more" href="${p.url}">...Leer más</a>
+        <a class="read-more" href="${p.url}">Leer más</a>
         <div class="age-bottom">${ageLabel(p.dateObj)}</div>
       </div>
     </article>
@@ -85,10 +85,10 @@ function renderList(posts, mountNode) {
       <article class="news-card ${cssClass}">
         <img class="thumb" src="${p.image}" alt="${escapeHTML(p.title)}" />
         <div>
-          <div class="meta"><span>${p.date}</span></div>
-          <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
+          <div class="meta"><span>${p.date}</span><span class="read-time">${readingTime(p)} min lectura</span></div>
+          <h3><span class="editorial-pill ${p.editorial === "GEPAC" ? "pill-gepac" : "pill-aeal"}">${escapeHTML(p.editorial)}</span> ${escapeHTML(p.title)}</h3>
           <p>${escapeHTML(p.summary)}</p>
-          <a class="read-more" href="${p.url}">...Leer más</a>
+          <a class="read-more" href="${p.url}">Leer más</a>
           <div class="card-footer">
             <span>${escapeHTML(p.category)}</span>
             <span>${escapeHTML(p.author)}</span>
@@ -146,6 +146,11 @@ function ageLabel(dateObj) {
   if (diffDays === 0) return "Noticia de hoy";
   if (diffDays === 1) return "Noticia de hace 1 día";
   return `Noticia de hace ${diffDays} días`;
+}
+
+function readingTime(p) {
+  const words = `${p.title || ''} ${p.summary || ''}`.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 180));
 }
 
 function isWithinLastNDays(dateISO, days = 30) {
