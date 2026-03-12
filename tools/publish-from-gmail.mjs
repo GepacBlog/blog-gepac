@@ -44,8 +44,12 @@ for (const t of threads) {
     const editorial = parsed.editorial.toUpperCase();
     const title = fields.title || parsed.title || 'Sin título';
     const rawContent = fields.body || bodyWithoutHeaders(bodyText) || bodyText || 'Contenido pendiente';
-    const content = sanitizeBody(rawContent);
-    const summary = clampSummary(firstCleanSentence(content) || 'Resumen pendiente');
+    let content = sanitizeBody(rawContent);
+    let summary = clampSummary(firstCleanSentence(content) || 'Resumen pendiente');
+
+    const qa = autoTuneQuality({ title, summary, content });
+    content = qa.content;
+    summary = qa.summary;
     const author = fields.author || (editorial === 'GEPAC' ? 'Equipo GEPAC' : 'Equipo AEAL');
     const fallbackDate = toISODate(new Date(Number(message.internalDate || Date.now())));
     const dateISO = normalizeDate(fields.date) || fallbackDate;
@@ -98,6 +102,15 @@ for (const t of threads) {
       title,
       threadId: t.id,
       text: `${title}\n${summary}\n${content}`,
+    });
+
+    appendQualityLog({
+      editorial,
+      title,
+      threadId: t.id,
+      score: qa.score,
+      actions: qa.actions,
+      issues: qa.issues,
     });
 
     run(`gog gmail thread modify ${t.id} --account ${ACCOUNT} --remove UNREAD,IMPORTANT --no-input`);
@@ -410,27 +423,40 @@ function deriveSubtitleFromParagraph(paragraph = '') {
   return head.length > 72 ? `${head.slice(0, 69)}…` : head;
 }
 
-function reviewQuality({ summary = '', content = '', bodyText = '', title = '' }) {
+function autoTuneQuality({ title = '', summary = '', content = '' }) {
+  const actions = [];
   const issues = [];
-  const combined = `${summary}\n${content}\n${bodyText}`;
 
-  if (!title || title.trim().length < 8) issues.push('Título demasiado corto o vacío');
-  if (!summary || summary.trim().length < 70) issues.push('Resumen demasiado corto');
-  if (!content || content.trim().length < 400) issues.push('Contenido demasiado corto');
+  let tunedContent = String(content || '').trim();
+  let tunedSummary = clampSummary(summary || firstCleanSentence(tunedContent) || 'Resumen pendiente');
 
-  const badPatterns = [
-    /\bDe:\s/i,
-    /\bEnviado:\s/i,
-    /\bPara:\s/i,
-    /\bAsunto:\s/i,
-    /\bKeywords?\b/i,
-    /\bTitle\s*SEO\b/i,
-    /\bMeta\s*description\b/i,
-    /\bFirma editorial\b/i,
-  ];
-  if (badPatterns.some((re) => re.test(combined))) issues.push('Texto interno/encabezado detectado');
+  // Reagrupa automáticamente si viene en bloque único muy largo
+  if (!/\n\n/.test(tunedContent) && tunedContent.length > 1200) {
+    tunedContent = autoParagraphize(tunedContent).join('\n\n');
+    actions.push('auto-paragraphize');
+  }
 
-  return { ok: issues.length === 0, issues };
+  // Limpieza de residuos editoriales internos
+  const before = tunedContent;
+  tunedContent = tunedContent
+    .replace(/\bDocumento de optimizaci[oó]n SEO editorial\b[\s\S]*$/i, '')
+    .replace(/\bInforme operativo para despliegue en redes sociales\b[\s\S]*$/i, '')
+    .replace(/\bMaterial de publicaci[oó]n listo para usar\b[\s\S]*$/i, '')
+    .trim();
+  if (tunedContent !== before) actions.push('strip-internal-blocks');
+
+  if (String(title).trim().length < 8) issues.push('titulo-corto');
+  if (tunedSummary.length < 70) issues.push('resumen-corto');
+  if (tunedContent.length < 350) issues.push('contenido-corto');
+
+  const qualityScore = Math.max(0, 100 - issues.length * 15 + actions.length * 5);
+  return {
+    content: tunedContent,
+    summary: tunedSummary,
+    score: qualityScore,
+    actions,
+    issues,
+  };
 }
 function toISODate(d) {
   return d.toISOString().slice(0, 10);
@@ -620,6 +646,25 @@ function appendMentionsLog({ editorial = '', title = '', threadId = '', text = '
     .map((m) => [csv(date), csv(time), csv(editorial), csv(title), csv(threadId), csv(m.type), csv(m.name)].join(','))
     .join('\n') + '\n';
   fs.appendFileSync(p, rows);
+}
+
+function appendQualityLog({ editorial = '', title = '', threadId = '', score = 0, actions = [], issues = [] }) {
+  const p = path.join(ROOT, 'data', 'control_calidad.csv');
+  if (!fs.existsSync(p)) {
+    fs.writeFileSync(p, 'fecha,hora,editor,titulo,thread_id,score,acciones,issues\n');
+  }
+  const { date, time } = madridDateTime();
+  const row = [
+    csv(date),
+    csv(time),
+    csv(editorial),
+    csv(title),
+    csv(threadId),
+    csv(score),
+    csv((actions || []).join('|')),
+    csv((issues || []).join('|')),
+  ].join(',') + '\n';
+  fs.appendFileSync(p, row);
 }
 
 function detectMentions(text = '') {
