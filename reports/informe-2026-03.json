@@ -134,12 +134,12 @@
     "topMentionedCount": 3
   },
   "ga4": {
-    "generatedAt": "2026-03-12T20:25:48.392Z",
+    "generatedAt": "2026-03-12T21:48:27.915Z",
     "propertyId": "528211346",
     "period": "last30days",
-    "sessions": 0,
-    "users": 0,
-    "engagementSeconds": 0,
+    "sessions": 1,
+    "users": 1,
+    "engagementSeconds": 21,
     "topPagesByViews": []
   },
   "posts": [

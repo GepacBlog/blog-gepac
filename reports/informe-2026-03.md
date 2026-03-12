@@ -12,7 +12,9 @@
 - Artículo con más menciones: **La oncología de precisión, clave para mejorar resultados y reducir inequidades** (3)
 
 ## KPI de impacto (GA4 · últimos 30 días)
-- Sin datos GA4 todavía
+- Sesiones: **1**
+- Usuarios: **1**
+- Tiempo de interacción acumulado: **21 s**
 
 ## Autoría (por email remitente)
 - fcalderonhuerta@hotmail.com: 1
