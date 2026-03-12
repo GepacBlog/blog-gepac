@@ -7,7 +7,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, CondPageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, CondPageBreak, KeepTogether
 
 
 def main():
@@ -113,19 +113,32 @@ def main():
     story.append(author_table)
     story.append(Spacer(1, 16))
 
-    # Evita dejar el título de sección huérfano al final de página
-    story.append(CondPageBreak(220))
-    story.append(Paragraph("Menciones detectadas (potenciales patrocinadores/entidades)", styles["H2"]))
     mention_rows = [["Entidad", "Nº menciones"]]
     for k, v in sorted(by_entity.items(), key=lambda x: x[1], reverse=True)[:25]:
         mention_rows.append([Paragraph(str(k), styles["Normal"]), str(v)])
     if len(mention_rows) == 1:
         mention_rows.append(["Sin menciones", "0"])
 
-    story.append(CondPageBreak(160))
-    mention_table = Table(mention_rows, colWidths=[360, 120], repeatRows=1)
-    style_table(mention_table)
-    story.append(mention_table)
+    # Mantener título + primera tabla juntos (sin título huérfano)
+    mention_data = mention_rows[1:]
+    first_chunk = mention_data[:12]
+    first_table = Table([["Entidad", "Nº menciones"]] + first_chunk, colWidths=[360, 120], repeatRows=1)
+    style_table(first_table)
+    story.append(CondPageBreak(260))
+    story.append(KeepTogether([
+        Paragraph("Menciones detectadas (potenciales patrocinadores/entidades)", styles["H2"]),
+        Spacer(1, 6),
+        first_table,
+    ]))
+
+    # Resto de filas (si las hay) en tablas sucesivas
+    for i in range(12, len(mention_data), 12):
+        chunk = mention_data[i:i+12]
+        t = Table([["Entidad", "Nº menciones"]] + chunk, colWidths=[360, 120], repeatRows=1)
+        style_table(t)
+        story.append(Spacer(1, 8))
+        story.append(t)
+
     story.append(Spacer(1, 12))
 
     story.append(Paragraph("Detalle de menciones por artículo", styles["H2"]))
