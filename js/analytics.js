@@ -15,6 +15,14 @@
     page_title: document.title,
   });
 
+  // Visualización explícita (útil para KPI de impacto)
+  const h1 = document.querySelector('h1');
+  sendEvent('visualizacion', {
+    page_path: location.pathname,
+    page_title: document.title,
+    article_title: safeText(h1) || document.title,
+  });
+
   // Click en enlaces de lectura
   document.addEventListener('click', (ev) => {
     const a = ev.target.closest('a');
