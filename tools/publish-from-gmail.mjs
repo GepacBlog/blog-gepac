@@ -88,7 +88,6 @@ for (const t of threads) {
       url: relUrl,
       author,
       category: editorial,
-      comments: 0,
     });
 
     publicationNotes.push({

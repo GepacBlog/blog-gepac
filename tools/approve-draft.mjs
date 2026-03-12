@@ -35,7 +35,6 @@ for (const d of selected) {
     url: relUrl,
     author: d.author,
     category: d.editorial,
-    comments: 0,
   });
 }
 

@@ -85,7 +85,6 @@ for (const file of docxFiles) {
     url: relUrl,
     author: parsed.author || (ctx.editorial === 'GEPAC' ? 'Equipo GEPAC' : 'Equipo AEAL'),
     category: ctx.editorial,
-    comments: 0,
   });
 }
 

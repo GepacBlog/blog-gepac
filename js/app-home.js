@@ -57,7 +57,6 @@ function normalizePost(p, i) {
     ...p,
     author: p.author || (p.editorial === "GEPAC" ? "Equipo GEPAC" : "Equipo AEAL"),
     category: p.category || defaultCategory,
-    comments: typeof p.comments === "number" ? p.comments : 0,
     views: typeof p.views === "number" ? p.views : Math.max(80, 420 - i * 17),
   };
 }
@@ -92,7 +91,6 @@ function renderList(posts, mountNode) {
           <div class="card-footer">
             <span>${escapeHTML(p.category)}</span>
             <span>${escapeHTML(p.author)}</span>
-            <span>${p.comments} comentarios</span>
           </div>
           <div class="age-bottom">${ageLabel(p.dateObj)}</div>
         </div>

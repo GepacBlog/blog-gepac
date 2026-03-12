@@ -8,8 +8,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-03-11_gepac_la-oncologia-de-precision-clave-para-mejorar-resultados-y-reducir-inequidades_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/005_2026-03-11_la-oncologia-de-precision-clave-para-mejorar-resultados-y-reducir-inequidades.html",
     "author": "Redacción GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-03-10-la-tecnologia-tambien-acompana-a-los-pacientes",
@@ -20,8 +19,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-03-10_gepac_la-tecnologia-tambien-acompana-a-los-pacientes_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/004_2026-03-10_la-tecnologia-tambien-acompana-a-los-pacientes.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-03-03-la-catedra-extraordinaria-cris-ucm-impulsa-el-futuro-de-los-medicos-investigadores-en-espana",
@@ -32,8 +30,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-03-03_gepac_la-catedra-extraordinaria-cris-ucm-impulsa-el-futuro-de-los-medicos-investigadores-en-espana_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/003_2026-03-03_la-catedra-extraordinaria-cris-ucm-impulsa-el-futuro-de-los-medicos-investigadores-en-espana.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-03-02-los-xiv-premios-gepac-reconoceran-las-obras-que-cambian-vidas-en-oncologia",
@@ -44,8 +41,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-03-02_gepac_los-xiv-premios-gepac-reconoceran-las-obras-que-cambian-vidas-en-oncologia_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/002_2026-03-02_los-xiv-premios-gepac-reconoceran-las-obras-que-cambian-vidas-en-oncologia.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-03-01-el-liderazgo-en-organizaciones-de-pacientes-da-un-paso-historico-con-el-nuevo-master-universitario-impulsado-por-urjc-y-gepac",
@@ -56,8 +52,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-03-01_gepac_el-liderazgo-en-organizaciones-de-pacientes-da-un-paso-historico-con-el-nuevo-master-universitario-impulsado-por-urjc-y-gepac_01.webp",
     "url": "./historicos/2026/03-marzo/gepac/001_2026-03-01_el-liderazgo-en-organizaciones-de-pacientes-da-un-paso-historico-con-el-nuevo-master-universitario-impulsado-por-urjc-y-gepac.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-02-06-viii-cumbre-espanola-contra-el-cancer",
@@ -68,8 +63,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-06_gepac_viii-cumbre-espanola-contra-el-cancer_01.webp",
     "url": "./historicos/2026/02-febrero/gepac/006_2026-02-06_viii-cumbre-espanola-contra-el-cancer.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-02-05-la-fundacion-leucemia-y-linfoma-convoca-la-beca-asun-almajano-2026-para-impulsar-la-investigacion-en-enfermedades-oncohematologicas",
@@ -80,8 +74,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-05_gepac_la-fundacion-leucemia-y-linfoma-convoca-la-beca-asun-almajano-2026-para-impulsar-la-investigacion-en-enfermedades-oncohematologicas_01.webp",
     "url": "./historicos/2026/02-febrero/gepac/005_2026-02-05_la-fundacion-leucemia-y-linfoma-convoca-la-beca-asun-almajano-2026-para-impulsar-la-investigacion-en-enfermedades-oncohematologicas.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-02-04-desayuno-levintalks",
@@ -92,8 +85,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-04_gepac_desayuno-levintalks_01.webp",
     "url": "./historicos/2026/02-febrero/gepac/004_2026-02-04_desayuno-levintalks.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-02-03-dia-mundial-contra-el-cancer",
@@ -104,8 +96,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-03_gepac_dia-mundial-contra-el-cancer_01.webp",
     "url": "./historicos/2026/02-febrero/gepac/003_2026-02-03_dia-mundial-contra-el-cancer.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-02-02-taller-de-maquillaje-junto-a-pierre-fabre-y-skin-cancer",
@@ -116,8 +107,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-02_gepac_taller-de-maquillaje-junto-a-pierre-fabre-y-skin-cancer_01.webp",
     "url": "./historicos/2026/02-febrero/gepac/002_2026-02-02_taller-de-maquillaje-junto-a-pierre-fabre-y-skin-cancer.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "aeal-2026-02-02-la-eicr-cronica-una-enfermedad-invisible-tras-el-trasplante-de-medula-osea-que-requiere-un-abordaje-integral",
@@ -128,8 +118,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-02-02_aeal_la-eicr-cronica-una-enfermedad-invisible-tras-el-trasplante-de-medula-osea-que-requiere-un-abordaje-integral_01.webp",
     "url": "./historicos/2026/02-febrero/aeal/001_2026-02-02_la-eicr-cronica-una-enfermedad-invisible-tras-el-trasplante-de-medula-osea-que-requiere-un-abordaje-integral.html",
     "author": "Equipo AEAL",
-    "category": "AEAL",
-    "comments": 0
+    "category": "AEAL"
   },
   {
     "id": "gepac-2026-01-03-cadena-humana-por-12-millones-de-pasos-caminar-juntos-por-la-prevencion-del-cancer",
@@ -140,8 +129,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-01-03_gepac_cadena-humana-por-12-millones-de-pasos-caminar-juntos-por-la-prevencion-del-cancer_01.webp",
     "url": "./historicos/2026/01-enero/gepac/002_2026-01-03_cadena-humana-por-12-millones-de-pasos-caminar-juntos-por-la-prevencion-del-cancer.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "gepac-2026-01-02-serie-gepac-firma-del-convenio-con-farmaindustria",
@@ -152,8 +140,7 @@ window.POSTS = [
     "image": "./assets/uploads/2026-01-02_gepac_serie-gepac-firma-del-convenio-con-farmaindustria_01.webp",
     "url": "./historicos/2026/01-enero/gepac/001_2026-01-02_serie-gepac-firma-del-convenio-con-farmaindustria.html",
     "author": "Equipo GEPAC",
-    "category": "GEPAC",
-    "comments": 0
+    "category": "GEPAC"
   },
   {
     "id": "aeal-2026-01-01-serie-aeal-eicr-cronica",
@@ -164,7 +151,6 @@ window.POSTS = [
     "image": "./assets/uploads/2026-01-01_aeal_serie-aeal-eicr-cronica_01.webp",
     "url": "./historicos/2026/01-enero/aeal/001_2026-01-01_serie-aeal-eicr-cronica.html",
     "author": "Equipo AEAL",
-    "category": "AEAL",
-    "comments": 0
+    "category": "AEAL"
   }
 ];
