@@ -5,6 +5,7 @@ import { execSync } from 'node:child_process';
 
 const ACCOUNT = process.env.BLOG_MAIL_ACCOUNT || 'agentekrok@gmail.com';
 const QUERY = process.env.BLOG_MAIL_QUERY || '(in:important OR in:inbox)';
+const NOTIFY_EMAIL = process.env.BLOG_NOTIFY_EMAIL || 'fcalderon@krok.com';
 const ROOT = path.resolve(process.cwd());
 const TMP = path.join(ROOT, '.mail_tmp');
 
@@ -16,6 +17,7 @@ const processedThreads = loadProcessedThreads();
 
 let processed = 0;
 const errors = [];
+const publicationNotes = [];
 for (const t of threads) {
   if (processedThreads.has(t.id)) continue;
   try {
@@ -89,6 +91,18 @@ for (const t of threads) {
       comments: 0,
     });
 
+    publicationNotes.push({
+      editorial,
+      date: dateISO,
+      title,
+      summary,
+      url: relUrl,
+      qualityScore: qa.score,
+      qualityIssues: qa.issues,
+      qualityActions: qa.actions,
+      mentions: detectMentions(`${title}\n${summary}\n${content}`).map((m) => m.name),
+    });
+
     appendAuthorshipLog({
       editorial,
       senderEmail,
@@ -127,6 +141,7 @@ syncPostsJs();
 writePublisherStatus({ processed, errors });
 if (processed > 0) {
   autoGitPublish(processed);
+  sendPublicationDigestByEmail(publicationNotes, errors);
 }
 console.log(`Publicadas: ${processed}`);
 
@@ -781,6 +796,27 @@ function syncDraftsJs() {
   const drafts = loadDrafts();
   fs.writeFileSync(path.join(ROOT, 'data', 'drafts.js'), `window.DRAFTS = ${JSON.stringify(drafts, null, 2)};\n`);
 }
+function sendPublicationDigestByEmail(notes = [], errors = []) {
+  if (!NOTIFY_EMAIL || !notes.length) return;
+  const lines = [];
+  lines.push(`Publicadas: ${notes.length}`);
+  lines.push('');
+  for (const n of notes) {
+    lines.push(`- [${n.editorial}] ${n.title} (${n.date})`);
+    lines.push(`  URL: https://gepacblog.github.io/blog-gepac/${String(n.url || '').replace(/^\.\//, '')}`);
+    lines.push(`  Calidad: ${n.qualityScore} | acciones: ${(n.qualityActions || []).join(', ') || 'ninguna'} | issues: ${(n.qualityIssues || []).join(', ') || 'ninguno'}`);
+    lines.push(`  Entidades: ${(n.mentions || []).join(', ') || 'sin detección'}`);
+    lines.push('');
+  }
+  if (errors.length) {
+    lines.push('Errores detectados:');
+    for (const e of errors) lines.push(`- ${e}`);
+  }
+  const subject = `Publicación automática blog: ${notes.length} nueva(s)`;
+  const body = lines.join('\n').trim();
+  run(`gog gmail send --account ${shellEscape(ACCOUNT)} --to ${shellEscape(NOTIFY_EMAIL)} --subject ${shellEscape(subject)} --body ${shellEscape(body)} --no-input`);
+}
+
 function writePublisherStatus({ processed, errors }) {
   const status = {
     lastRun: new Date().toISOString(),
