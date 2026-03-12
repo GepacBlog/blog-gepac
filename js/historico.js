@@ -161,7 +161,7 @@ function renderCard(p) {
         <div class="meta"><span>${p.date}</span></div>
         <h3>Editorial ${escapeHTML(p.editorial)} · ${escapeHTML(p.title)}</h3>
         <p>${escapeHTML(p.summary)}</p>
-        <a class="read-more" href="${p.url}">...Leer más</a>
+        <a class="read-more" href="${p.url}">Leer más</a>
         <div class="age-bottom">${ageLabel(p.dateObj)}</div>
       </div>
     </article>
