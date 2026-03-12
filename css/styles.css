@@ -465,3 +465,12 @@ section h2 {
   font-style: italic;
   padding: 8px;
 }
+
+.bottom-back-wrap {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+.bottom-back {
+  font-weight: 700;
+}
