@@ -534,6 +534,13 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
 <html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${escapeHTML(seoTitle)}</title>
 <meta name="description" content="${escapeHTML(seoDescription)}"/>
 ${seoKeywords ? `<meta name="keywords" content="${escapeHTML(seoKeywords)}"/>` : ''}
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WHK7D5DV8Y"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);} 
+gtag('js', new Date());
+gtag('config', 'G-WHK7D5DV8Y');
+</script>
 </head>
 <body style="font-family:Inter,system-ui,sans-serif;background:${articleBg};padding:20px;color:#222">
 <div style="max-width:800px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:12px;padding:20px;line-height:1.6;">

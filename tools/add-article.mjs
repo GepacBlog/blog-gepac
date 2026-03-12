@@ -27,7 +27,15 @@ const filePath = path.join(folder, fileName);
 const relUrl = `./historicos/${year}/${monthFolder}/${editorialSlug}/${fileName}`;
 
 const articleHtml = `<!doctype html>
-<html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${title}</title></head>
+<html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>${title}</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WHK7D5DV8Y"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} 
+  gtag('js', new Date());
+  gtag('config', 'G-WHK7D5DV8Y');
+</script>
+</head>
 <body style="font-family:Inter,system-ui,sans-serif;max-width:800px;margin:30px auto;padding:0 16px;line-height:1.6;color:#222">
 <a href="../../../../index.html">← Volver a portada</a>
 <h1>${title}</h1>
