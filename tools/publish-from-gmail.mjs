@@ -370,7 +370,7 @@ function renderBodyHtml(content = '') {
       }
     }
 
-    out.push(`<p>${autoLinkUrls(escapeHTML(b))}</p>`);
+    out.push(`<p style="margin:0 0 12px;color:#243047">${autoLinkUrls(escapeHTML(b))}</p>`);
     paraSinceSubtitle += 1;
   }
 
@@ -564,8 +564,8 @@ function createArticle({ editorial, dateISO, title, summary, content, author, im
     : imageEnd;
 
   const articleBg = editorial.toUpperCase() === 'GEPAC'
-    ? 'linear-gradient(135deg, #efe6ff 0%, #ffffff 100%)'
-    : 'linear-gradient(135deg, #ffeedc 0%, #ffffff 100%)';
+    ? 'linear-gradient(140deg, #f4ecff 0%, #ffffff 55%, #f8f5ff 100%)'
+    : 'linear-gradient(140deg, #fff3e8 0%, #ffffff 55%, #fff7ef 100%)';
 
   const seoTitle = String(titleSeo || title).trim();
   const seoDescription = clampSummary(metaDescription || summary);
@@ -583,15 +583,20 @@ gtag('js', new Date());
 gtag('config', 'G-WHK7D5DV8Y');
 </script>
 </head>
-<body style="font-family:Inter,system-ui,sans-serif;background:${articleBg};padding:20px;color:#222">
-<div style="max-width:800px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:12px;padding:20px;line-height:1.6;">
-<a href="../../../../index.html">← Volver a portada</a>
-<h1>${escapeHTML(title)}</h1>
-<div style="color:#666;margin-bottom:1rem">Editorial ${escapeHTML(editorial)} · ${escapeHTML(dateISO)} · ${escapeHTML(author)}</div>
-${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>` : ''}
-<p>${escapeHTML(summary)}</p>
+<body style="font-family:Inter,system-ui,sans-serif;background:${articleBg};padding:26px 16px;color:#1f2533">
+<div style="max-width:860px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:16px;padding:24px 24px 22px;line-height:1.72;box-shadow:0 14px 34px rgba(21,31,52,.08)">
+<a href="../../../../index.html" style="display:inline-block;color:#1f5fbf;text-decoration:none;font-weight:700;margin-bottom:12px">← Volver a portada</a>
+<h1 style="margin:4px 0 10px;font-family:Georgia,'Times New Roman',serif;font-size:2rem;line-height:1.2">${escapeHTML(title)}</h1>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:#556078;margin-bottom:14px;font-size:.9rem">
+  <span style="display:inline-flex;border-radius:999px;padding:3px 10px;font-size:.74rem;font-weight:800;${editorial.toUpperCase()==='GEPAC' ? 'background:#e9dcff;color:#4b2f87;border:1px solid #cfb9f5' : 'background:#ffe5cf;color:#7a3f0d;border:1px solid #f2bf92'}">${escapeHTML(editorial)}</span>
+  <span>${escapeHTML(dateISO)}</span>
+  <span>·</span>
+  <span>${escapeHTML(author)}</span>
+</div>
+${articleImageMain ? `<img src="${escapeHTML(articleImageMain)}" alt="${escapeHTML(title)}" style="width:100%;max-width:812px;border-radius:12px;margin:0 0 18px;border:1px solid #d7deea"/>` : ''}
+<p style="font-size:1.03rem;color:#2f3b52;margin:0 0 14px"><strong>${escapeHTML(summary)}</strong></p>
 ${renderBodyHtml(content)}
-${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:760px;border-radius:10px;margin:16px 0 0;border:1px solid #ddd"/></p>` : ''}
+${articleImageEnd ? `<p><img src="${escapeHTML(articleImageEnd)}" alt="${escapeHTML(title)}" style="width:100%;max-width:812px;border-radius:12px;margin:18px 0 0;border:1px solid #d7deea"/></p>` : ''}
 </div>
 <script src="../../../../js/analytics.js?v=20260312-1"></script>
 </body></html>`;

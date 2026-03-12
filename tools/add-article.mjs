@@ -36,12 +36,14 @@ const articleHtml = `<!doctype html>
   gtag('config', 'G-WHK7D5DV8Y');
 </script>
 </head>
-<body style="font-family:Inter,system-ui,sans-serif;max-width:800px;margin:30px auto;padding:0 16px;line-height:1.6;color:#222">
-<a href="../../../../index.html">← Volver a portada</a>
-<h1>${title}</h1>
-<div style="color:#666;margin-bottom:1rem">Editorial ${editorial} · ${dateISO}</div>
-<img src="${image}" alt="${title}" style="width:100%;max-width:760px;border-radius:10px;margin:0 0 16px;border:1px solid #ddd"/>
-<p>Aquí va el contenido completo de la noticia.</p>
+<body style="font-family:Inter,system-ui,sans-serif;background:linear-gradient(140deg,#f4ecff 0%,#fff 55%,#f8f5ff 100%);padding:26px 16px;color:#1f2533">
+<div style="max-width:860px;margin:0 auto;background:#fff;border:1px solid #e3e6ef;border-radius:16px;padding:24px;line-height:1.72;box-shadow:0 14px 34px rgba(21,31,52,.08)">
+<a href="../../../../index.html" style="display:inline-block;color:#1f5fbf;text-decoration:none;font-weight:700;margin-bottom:12px">← Volver a portada</a>
+<h1 style="margin:4px 0 10px;font-family:Georgia,'Times New Roman',serif;font-size:2rem;line-height:1.2">${title}</h1>
+<div style="color:#556078;margin-bottom:14px">Editorial ${editorial} · ${dateISO}</div>
+<img src="${image}" alt="${title}" style="width:100%;max-width:812px;border-radius:12px;margin:0 0 16px;border:1px solid #d7deea"/>
+<p style="margin:0 0 12px;color:#243047">Aquí va el contenido completo de la noticia.</p>
+</div>
 <script src="../../../../js/analytics.js?v=20260312-1"></script>
 </body></html>`;
 
