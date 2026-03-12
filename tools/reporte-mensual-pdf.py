@@ -102,15 +102,30 @@ def main():
     story.append(ga4_table)
     story.append(Spacer(1, 16))
 
-    story.append(Paragraph("Control de autoría (emails remitentes)", styles["H2"]))
     author_rows = [["Email remitente", "Nº artículos"]]
     for k, v in sorted(by_email.items(), key=lambda x: x[1], reverse=True)[:20]:
         author_rows.append([k, str(v)])
     if len(author_rows) == 1:
         author_rows.append(["Sin datos", "0"])
-    author_table = Table(author_rows, colWidths=[360, 120])
-    style_table(author_table)
-    story.append(author_table)
+
+    first_author_table = Table(author_rows[: min(len(author_rows), 8)], colWidths=[360, 120], repeatRows=1)
+    style_table(first_author_table)
+    story.append(CondPageBreak(190))
+    story.append(KeepTogether([
+        Paragraph("Control de autoría (emails remitentes)", styles["H2"]),
+        Spacer(1, 6),
+        first_author_table,
+    ]))
+
+    if len(author_rows) > 8:
+        rest = author_rows[8:]
+        for i in range(0, len(rest), 10):
+            chunk = [["Email remitente", "Nº artículos"]] + rest[i:i+10]
+            t = Table(chunk, colWidths=[360, 120], repeatRows=1)
+            style_table(t)
+            story.append(Spacer(1, 8))
+            story.append(t)
+
     story.append(Spacer(1, 16))
 
     story.append(PageBreak())
