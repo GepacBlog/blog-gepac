@@ -5,7 +5,7 @@ window.POSTS = [
     "date": "2026-03-14",
     "title": "Aún puedes presentar candidaturas a la 14ª Edición de Premios GEPAC y al XI Concurso de Relatos",
     "summary": "GEPAC recuerda que siguen abiertos los plazos de participación en la 14ª Edición de Premios GEPAC y en el XI Concurso de Relatos. Como novedad, los finalistas entrarán en el sorteo de un viaje para dos personas a Riviera Maya.",
-    "image": "https://gepac.es/premios14/images/img-compartir.png",
+    "image": "./assets/uploads/2026-03-14_gepac_candidaturas-premios_01.png",
     "url": "./historicos/2026/03-marzo/gepac/006_2026-03-14_aun-puedes-presentar-candidaturas-a-la-14-edicion-de-premios-gepac-y-al-xi-concurso-de-relatos.html"
   },
   {
